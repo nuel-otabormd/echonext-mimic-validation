@@ -5,7 +5,7 @@ All labels derived from MIMIC-IV-ECHO **structured** fields (`structured_measure
 | # | Condition | EchoNext definition | MIMIC primary definition | Sensitivity analyses | Prevalence % (MIMIC / EchoNext-Mini)³ |
 |---|---|---|---|---|---|
 | 1 | Reduced LVEF | numeric LVEF ≤45% | best-available quantitative LVEF (biplane→3D→visual-range midpoint) ≤45% | midpoint-only; lower-bound | 16.0% / 18.0% |
-| 2 | LV hypertrophy | max(IVS, posterior wall) ≥1.3 cm | max(septal_thickness, **inferolateral** wall) ≥1.3 cm¹ | septal ≥1.5 cm; categorical moderate-or-severe LVH⁴ | 22.4% / 18.8% |
+| 2 | LV hypertrophy | max(IVS, posterior wall) ≥1.3 cm | max(`septal_thickness`, **inferolateral** wall) ≥1.3 cm¹ | septal ≥1.5 cm; categorical moderate-or-severe LVH⁴ | 22.4% / 18.8% |
 | 3 | Aortic stenosis | moderate-or-greater | `aortic_stenosis` ∈ {mod, mod-severe, severe, very severe} | — | 4.5% / 5.4% |
 | 4 | Aortic regurgitation | moderate-or-greater | `aortic_regurg` ≥ moderate (mild-mod = negative) | — | 1.5% / 1.2% |
 | 5 | Mitral regurgitation | moderate-or-greater | `mitral_regurg` ≥ moderate (mild-mod = negative) | — | 8.8% / 6.5% |
