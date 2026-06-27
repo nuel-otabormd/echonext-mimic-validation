@@ -32,6 +32,16 @@ Artifacts: `EchoNext-repo/results_full/` (`probs.npy` 45,878×12, `kept_paths.tx
 
 Reference: EchoNext-Mini internal composite 0.820; LVWT (their weakest) 0.730.
 
+### 2b. Secondary — LV hypertrophy at higher grades (n=45,878; reproducible via `sql/06_lvh_secondary.sql` + `code/lvh_secondary.py`)
+The model's wall-thickness probability discriminates higher-grade hypertrophy better than the 1.3 cm label. Regenerated directly on the **locked** one-per-patient cohort — sanity: regenerated `max(IVS,inflat)≥1.3` reproduces the locked `lvwt_gte_13` label 100% (45,878/45,878) → 22.4% prevalence, AUROC 0.679.
+| Outcome | Prev% | AUROC (95% CI) |
+|---|---|---|
+| LVWT ≥1.3 cm (primary; sanity) | 22.4 | 0.679 (0.673–0.684) |
+| Septal IVS ≥1.5 cm | 4.0 | **0.746 (0.736–0.756)** |
+| Categorical moderate-or-severe LVH | 3.2 | **0.754 (0.743–0.764)** |
+
+Categorical LVH = MIMIC-IV-ECHO `lv_wall_thickness` grades "mod symmetric (1.5–1.7 cm)" or "severe symmetric (>1.7 cm)". 2,000-sample patient-level bootstrap CIs.
+
 ## 3. Recalibration — 5-fold out-of-fold Platt (Table 3; slope-before == Table 2 calibration slope)
 | Label | Brier before | Brier after | Slope before | Slope after |
 |---|---|---|---|---|
@@ -69,7 +79,7 @@ Subgroup calibration slopes (descriptive): sex 0.89/0.98; age 0.91/0.84/0.79; ra
 ECG→TTE window ≤30–365 d ~0.79; LVEF def midpoint/lower-bound 0.835/0.825; RV categorical/+TAPSE 0.837/0.830; TR Vmax direct/gradient 0.763/0.765; PASP RAP ASE/3/5/10 ~0.77→0.75; atrial-rate 0/proxy/75 bpm 0.786 (all). Calibration also stable across variants.
 
 ## 6. LV hypertrophy secondary
-LVWT AUROC ≥1.3 cm 0.679 (mild-dominated) → IVS ≥1.5 cm 0.745 → categorical mod/severe LVH 0.754. ECG's known low sensitivity for mild hypertrophy; matches EchoNext-internal 0.730.
+LVWT AUROC ≥1.3 cm 0.679 (mild-dominated) → IVS ≥1.5 cm 0.746 → categorical mod/severe LVH 0.754 (full locked cohort, n=45,878; see §2b and Supp Table S5). ECG's known low sensitivity for mild hypertrophy; matches EchoNext-internal 0.730.
 
 ## 7. Verification
 Standalone inference == official EchoNext Lightning module to 1.19×10⁻⁷. All `.dat` = 120,000 bytes (12-lead/5000-sample/500 Hz). Deterministic cohort; predictions 1:1.
