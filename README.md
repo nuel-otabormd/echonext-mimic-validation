@@ -12,7 +12,7 @@ one most-recent ECG per patient).
 > no large differences across sex or reported race/ethnicity. LV-hypertrophy detection is the
 > principal limitation.
 
-**Composite SHD AUROC 0.790 (95% CI 0.787–0.794)** vs 0.820 internal; composite calibration slope
+**Composite SHD AUROC 0.790 (95% CI 0.786–0.794)** vs 0.820 internal; composite calibration slope
 0.94 → 1.00 after five-fold out-of-fold Platt recalibration. Pipeline reproduces the official
 EchoNext Lightning module to 1.19×10⁻⁷.
 

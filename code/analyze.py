@@ -34,7 +34,7 @@ def logit(p): p=np.clip(p,1e-6,1-1e-6); return np.log(p/(1-p))
 def calib(y,p):
     s=LogisticRegression().fit(logit(p).reshape(-1,1),y).coef_[0,0]
     return s, y.mean()-p.mean()    # slope, calibration-in-large (obs-pred)
-def boot_auc(y,p,B=400):
+def boot_auc(y,p,B=2000):
     rng=np.random.default_rng(0); a=[]
     for _ in range(B):
         i=rng.integers(0,len(y),len(y))

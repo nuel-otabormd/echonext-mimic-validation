@@ -34,7 +34,7 @@ def subj(p): return p.split("/")[2][1:]
 sex=np.array([r['gender'].strip().upper() for r in rows]); age=np.array([float(r['age_at_ecg']) for r in rows])
 rc=np.array([race.get(subj(p),"Unknown") for p in paths]); n=len(rows)
 ys=y[:,11]; ps=probs[:,11]   # composite SHD outcome/probs (used by the optional fairness panel)
-def bootci(yt,pp,B=500):
+def bootci(yt,pp,B=2000):
     rng=np.random.default_rng(0); a=[]
     for _ in range(B):
         i=rng.integers(0,len(yt),len(yt))

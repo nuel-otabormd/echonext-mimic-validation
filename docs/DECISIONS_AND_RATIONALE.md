@@ -35,7 +35,7 @@ All from MIMIC structured echo (`structured_measurement`, **TTE only**), not fre
 - **Waveform integrity:** all `.dat` must be exactly 120,000 bytes (12 leads × 5000 samples × 2). Truncated downloads fail wfdb validation and are skipped (no silent corruption). Re-download check: `find ecg_needed -name '*.dat' ! -size 120000c`.
 
 ## Analysis (`code/analyze.py`, `sensitivity.py`, `calib_robust.py`)
-- Discrimination: AUROC/AUPRC + 400-bootstrap 95% CI (patient-level).
+- Discrimination: AUROC/AUPRC + 2,000-bootstrap 95% CI (patient-level).
 - Calibration: slope (logistic of outcome on predicted logit), calibration-in-the-large, quantile-binned reliability.
 - Recalibration: **5-fold out-of-fold** Platt + isotonic (NOT spline; not apparent/in-sample).
 - Clinical utility: **decision-curve analysis excluded from the manuscript** — the cohort is clinically selected (all patients already echocardiographed), so net benefit for echo referral is not interpretable; utility is addressed narratively (a prospective unselected cohort would be required). `analyze.py` can still compute it, but it is not reported (Figure 3 = ROC only).

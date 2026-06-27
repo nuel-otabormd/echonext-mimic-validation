@@ -14,21 +14,21 @@ Artifacts: `EchoNext-repo/results_full/` (`probs.npy` 45,878×12, `kept_paths.tx
 - Any-SHD 21,590 (47.1%). ECG→echo interval median 2 [IQR 1–15] days.
 - Per-label structured-field missingness → Supplementary Table S3 (`docs/supplement_table_S3_missingness.md`).
 
-## 2. Discrimination & calibration (Table 2; n=45,878, 400-boot 95% CI)
+## 2. Discrimination & calibration (Table 2; n=45,878, 2,000-boot 95% CI)
 | Label | Prev% | AUROC (95% CI) | AUPRC | Brier | Calib slope | Calib-in-large |
 |---|---|---|---|---|---|---|
-| **SHD (composite)** | 47.1 | **0.790 (0.787–0.794)** | 0.771 | 0.187 | 0.936 | +0.028 |
+| **SHD (composite)** | 47.1 | **0.790 (0.786–0.794)** | 0.771 | 0.187 | 0.936 | +0.028 |
 | Reduced LVEF ≤45 | 16.0 | 0.835 (0.830–0.840) | 0.514 | 0.174 | 1.15 | −0.237 |
 | **RV dysfunction** (categorical) | 5.8 | 0.837 (0.830–0.845) | 0.283 | 0.162 | 1.14 | −0.292 |
 | Mitral regurgitation | 8.8 | 0.805 (0.798–0.811) | 0.285 | 0.175 | 1.08 | −0.279 |
-| Tricuspid regurgitation | 10.3 | 0.798 (0.791–0.804) | 0.314 | 0.162 | 1.15 | −0.262 |
+| Tricuspid regurgitation | 10.3 | 0.798 (0.792–0.804) | 0.314 | 0.162 | 1.15 | −0.262 |
 | Aortic stenosis | 4.5 | 0.782 (0.773–0.790) | 0.126 | 0.214 | 0.93 | −0.357 |
 | PASP ≥45 | 10.7 | 0.768 (0.762–0.774) | 0.270 | 0.184 | 1.13 | −0.288 |
-| Pericardial (mod/large) | 0.6 | 0.765 (0.740–0.792) | 0.019 | 0.172 | 1.37 | −0.379 |
-| TR Vmax ≥3.2 (direct velocity) | 12.7 | 0.763 (0.758–0.769) | 0.301 | 0.180 | 1.06 | −0.260 |
-| Aortic regurgitation | 1.5 | 0.730 (0.714–0.746) | 0.039 | 0.186 | 0.84 | −0.353 |
-| Pulmonic regurgitation | 1.6 | 0.723 (0.705–0.740) | 0.051 | 0.136 | 0.56 | −0.263 |
-| **LV hypertrophy ≥1.3** | 22.4 | **0.679 (0.673–0.685)** | 0.350 | 0.208 | 0.78 | −0.198 |
+| Pericardial (mod/large) | 0.6 | 0.765 (0.738–0.791) | 0.019 | 0.172 | 1.37 | −0.379 |
+| TR Vmax ≥3.2 (direct velocity) | 12.7 | 0.763 (0.757–0.769) | 0.301 | 0.180 | 1.06 | −0.260 |
+| Aortic regurgitation | 1.5 | 0.730 (0.713–0.747) | 0.039 | 0.186 | 0.84 | −0.353 |
+| Pulmonic regurgitation | 1.6 | 0.723 (0.703–0.743) | 0.051 | 0.136 | 0.56 | −0.263 |
+| **LV hypertrophy ≥1.3** | 22.4 | **0.679 (0.673–0.684)** | 0.350 | 0.208 | 0.78 | −0.198 |
 
 Reference: EchoNext-Mini internal composite 0.820; LVWT (their weakest) 0.730.
 
@@ -55,13 +55,13 @@ Composite already near-calibrated; sub-conditions over-predict and recalibration
 |---|---|---|
 | Male | 0.778 (0.772–0.783) | 23,569 |
 | Female | 0.800 (0.795–0.806) | 22,309 |
-| Age <65 / 65–79 / ≥80 | 0.773 (0.766–0.780) / 0.751 (0.744–0.759) / 0.731 (0.722–0.741) | 19,492 / 15,360 / 11,026 |
+| Age <65 / 65–79 / ≥80 | 0.773 (0.766–0.780) / 0.751 (0.743–0.759) / 0.731 (0.722–0.742) | 19,492 / 15,360 / 11,026 |
 | White | 0.782 (0.777–0.787) | 30,890 |
 | Black | 0.798 (0.787–0.809) | 5,762 |
 | Hispanic | 0.776 (0.754–0.796) | 1,976 |
-| Asian | 0.802 (0.776–0.825) | 1,399 |
-| Other | 0.797 (0.777–0.818) | 1,685 |
-| Unknown | 0.821 (0.807–0.835) | 4,166 |
+| Asian | 0.802 (0.778–0.824) | 1,399 |
+| Other | 0.797 (0.777–0.817) | 1,685 |
+| Unknown | 0.821 (0.808–0.835) | 4,166 |
 
 Subgroup calibration slopes (descriptive): sex 0.89/0.98; age 0.91/0.84/0.79; race 0.92–1.01. Intervals overlap broadly → no large subgroup disparity (analyses descriptive).
 
