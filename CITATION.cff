@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+title: "External Validation of EchoNext-Mini in MIMIC-IV"
+message: "If you use this software or its results, please cite it."
+type: software
+authors:
+  - family-names: Otabor
+    given-names: Emmanuel
+version: 1.0.0
+date-released: 2026-06-26
+license: MIT
+repository-code: "https://github.com/REPLACE_USERNAME/echonext-mimic-validation"
+abstract: >-
+  Independent external validation, recalibration, and fairness audit of the publicly
+  released EchoNext-Mini ECG model for echocardiogram-confirmed structural heart disease,
+  applied frozen to MIMIC-IV (n=47,069). Includes BigQuery label/cohort definitions,
+  a WFDB-to-model inference adapter, and the full analysis pipeline.
+keywords:
+  - electrocardiography
+  - structural heart disease
+  - external validation
+  - calibration
+  - MIMIC-IV
+  - deep learning
+references:
+  - type: article
+    title: "EchoNext-Mini: A Dataset and Baseline AI Model for Detecting Structural Heart Disease from Electrocardiograms"
+    authors:
+      - family-names: Hughes
+        given-names: John Weston
+    doi: 10.1056/AIdbp2500516
+    year: 2026
+  - type: article
+    title: "Detecting structural heart disease from electrocardiograms using AI"
+    authors:
+      - family-names: Poterucha
+        given-names: Timothy J
+    doi: 10.1038/s41586-025-09227-0
+    year: 2025

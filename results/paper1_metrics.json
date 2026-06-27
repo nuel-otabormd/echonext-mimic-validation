@@ -1,0 +1,240 @@
+{
+  "table": [
+    {
+      "label": "lvef_lte_45",
+      "prev": 16.0,
+      "auroc": 0.835,
+      "ci": [
+        0.83,
+        0.84
+      ],
+      "auprc": 0.514,
+      "brier": 0.174,
+      "calib_slope": 1.153,
+      "calib_in_large": -0.237
+    },
+    {
+      "label": "lvwt_gte_13",
+      "prev": 22.4,
+      "auroc": 0.679,
+      "ci": [
+        0.673,
+        0.685
+      ],
+      "auprc": 0.35,
+      "brier": 0.208,
+      "calib_slope": 0.78,
+      "calib_in_large": -0.198
+    },
+    {
+      "label": "aortic_stenosis",
+      "prev": 4.5,
+      "auroc": 0.782,
+      "ci": [
+        0.773,
+        0.79
+      ],
+      "auprc": 0.126,
+      "brier": 0.214,
+      "calib_slope": 0.934,
+      "calib_in_large": -0.357
+    },
+    {
+      "label": "aortic_regurg",
+      "prev": 1.5,
+      "auroc": 0.73,
+      "ci": [
+        0.714,
+        0.746
+      ],
+      "auprc": 0.039,
+      "brier": 0.186,
+      "calib_slope": 0.839,
+      "calib_in_large": -0.353
+    },
+    {
+      "label": "mitral_regurg",
+      "prev": 8.8,
+      "auroc": 0.805,
+      "ci": [
+        0.798,
+        0.811
+      ],
+      "auprc": 0.285,
+      "brier": 0.175,
+      "calib_slope": 1.079,
+      "calib_in_large": -0.279
+    },
+    {
+      "label": "tricuspid_regurg",
+      "prev": 10.3,
+      "auroc": 0.798,
+      "ci": [
+        0.791,
+        0.804
+      ],
+      "auprc": 0.314,
+      "brier": 0.162,
+      "calib_slope": 1.146,
+      "calib_in_large": -0.262
+    },
+    {
+      "label": "pulm_regurg",
+      "prev": 1.6,
+      "auroc": 0.723,
+      "ci": [
+        0.705,
+        0.74
+      ],
+      "auprc": 0.051,
+      "brier": 0.136,
+      "calib_slope": 0.562,
+      "calib_in_large": -0.263
+    },
+    {
+      "label": "rv_dysfunction",
+      "prev": 5.8,
+      "auroc": 0.837,
+      "ci": [
+        0.83,
+        0.845
+      ],
+      "auprc": 0.283,
+      "brier": 0.162,
+      "calib_slope": 1.143,
+      "calib_in_large": -0.292
+    },
+    {
+      "label": "pericardial",
+      "prev": 0.6,
+      "auroc": 0.765,
+      "ci": [
+        0.74,
+        0.792
+      ],
+      "auprc": 0.019,
+      "brier": 0.172,
+      "calib_slope": 1.369,
+      "calib_in_large": -0.379
+    },
+    {
+      "label": "pasp_gte_45",
+      "prev": 10.7,
+      "auroc": 0.768,
+      "ci": [
+        0.762,
+        0.774
+      ],
+      "auprc": 0.27,
+      "brier": 0.184,
+      "calib_slope": 1.13,
+      "calib_in_large": -0.288
+    },
+    {
+      "label": "tr_max_gte_32",
+      "prev": 12.7,
+      "auroc": 0.763,
+      "ci": [
+        0.758,
+        0.769
+      ],
+      "auprc": 0.301,
+      "brier": 0.18,
+      "calib_slope": 1.056,
+      "calib_in_large": -0.26
+    },
+    {
+      "label": "shd",
+      "prev": 47.1,
+      "auroc": 0.79,
+      "ci": [
+        0.787,
+        0.794
+      ],
+      "auprc": 0.771,
+      "brier": 0.187,
+      "calib_slope": 0.936,
+      "calib_in_large": 0.028
+    }
+  ],
+  "recal": {
+    "brier_before": 0.1871,
+    "brier_after": 0.1862,
+    "slope_before": 0.936,
+    "slope_after": 1.0
+  },
+  "fairness": {
+    "sex": {
+      "M": {
+        "n": 23569,
+        "prev": 51.3,
+        "auroc": 0.778,
+        "slope": 0.891
+      },
+      "F": {
+        "n": 22309,
+        "prev": 42.5,
+        "auroc": 0.8,
+        "slope": 0.975
+      }
+    },
+    "age": {
+      "<65": {
+        "n": 19492,
+        "prev": 31.6,
+        "auroc": 0.773,
+        "slope": 0.914
+      },
+      "65-79": {
+        "n": 15360,
+        "prev": 50.7,
+        "auroc": 0.751,
+        "slope": 0.844
+      },
+      "80+": {
+        "n": 11026,
+        "prev": 69.3,
+        "auroc": 0.731,
+        "slope": 0.791
+      }
+    },
+    "race": {
+      "White": {
+        "n": 30890,
+        "prev": 49.1,
+        "auroc": 0.782,
+        "slope": 0.92
+      },
+      "Black": {
+        "n": 5762,
+        "prev": 49.3,
+        "auroc": 0.798,
+        "slope": 0.964
+      },
+      "Hispanic": {
+        "n": 1976,
+        "prev": 38.7,
+        "auroc": 0.776,
+        "slope": 0.881
+      },
+      "Asian": {
+        "n": 1399,
+        "prev": 39.4,
+        "auroc": 0.802,
+        "slope": 0.97
+      },
+      "Other": {
+        "n": 1685,
+        "prev": 41.7,
+        "auroc": 0.797,
+        "slope": 0.964
+      },
+      "Unknown": {
+        "n": 4166,
+        "prev": 37.6,
+        "auroc": 0.821,
+        "slope": 1.005
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+# NEVER commit patient-level / credentialed data
+*.csv
+*.npy
+ecg_needed/
+*.dat
+*.hea
+results_full/probs.npy
+results_full/kept_paths.txt
+__pycache__/
+.venv/
+
+# Cowork / build scratch — never commit
+node_modules/
+.DS_Store
+*.tmp
+*.lock
+.~lock*
+*~#
+manuscript/node_modules/
+# Cowork manuscript scratch (keep only final v6 docx + MANUSCRIPT_DRAFT.md)
+manuscript/*.jpg
+manuscript/*.js
+manuscript/build_styled.py
+manuscript/renumber.py
+manuscript/_*.md
+manuscript/MANUSCRIPT_EHJDH_v*.md
+manuscript/MANUSCRIPT_DRAFT_v*.md
+manuscript/EchoNext_EHJDH_Manuscript_v3.docx
+manuscript/EchoNext_EHJDH_Manuscript_v4.docx
+manuscript/EchoNext_Paper1_Manuscript_v2.docx
+manuscript/EchoNext_EHJDH_Manuscript_v5.docx
+manuscript/EchoNext_EHJDH_Manuscript_v5.pdf
+docs/MASTER_PROJECT_DOC.md
+
+# Manuscript kept local only (not in public repo)
+manuscript/
