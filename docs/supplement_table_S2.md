@@ -23,3 +23,14 @@ These analyses use the n=45,035 patients carrying the auxiliary structured field
 | PASP RAP assumption | fixed RAP 10 | 45,035 | 19.5 | 0.748 | 0.183 | 1.01 | -0.199 |
 
 *Atrial rate (a model input unavailable in MIMIC, imputed 0) was additionally varied (0 / ventricular-rate proxy / fixed 75 bpm); discrimination was unchanged (AUROC 0.786 in all three), confirming insensitivity to this imputation.*
+
+### Secondary LV wall-thickness analyses
+Unlike the robustness rows above (n=45,035 subset), these analyses use the **full** primary cohort (n=45,878), regenerated directly from the locked cohort with each ECG's own linked echo. The primary max(septal, inferolateral) ≥1.3 cm label reproduces the main analysis exactly (sanity check: agrees with the locked `lvwt_gte_13` label for 45,878/45,878 patients), confirming alignment. Discrimination was higher for higher-grade hypertrophy definitions.
+
+| Definition | n | Prev % | AUROC (95% CI) |
+|---|---|---|---|
+| Primary LV wall thickness: max(septal, inferolateral) ≥1.3 cm | 45,878 | 22.4 | 0.679 (0.673–0.684) |
+| Septal thickness ≥1.5 cm | 45,878 | 4.0 | 0.746 (0.736–0.756) |
+| Categorical moderate-or-severe LVH | 45,878 | 3.2 | 0.754 (0.743–0.764) |
+
+Categorical LVH = MIMIC-IV-ECHO `lv_wall_thickness` graded "mod symmetric (1.5–1.7 cm)" or "severe symmetric (>1.7 cm)". 2,000-sample patient-level bootstrap CIs. Reproduce: `sql/06_lvh_secondary.sql` → `code/lvh_secondary.py`.

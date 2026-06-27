@@ -23,13 +23,13 @@ sql/    01_echo_labels.sql        12 SHD labels from MIMIC-IV-ECHO structured fi
         03_care_setting.sql       care setting at ECG (encounter linkage)
         04_export_for_analysis.sql BigQuery cohort + race -> the local CSVs the scripts read
         05_missingness.sql        per-label structured-field availability (Supp Table S3)
-        06_lvh_secondary.sql      LV-hypertrophy at higher grades, locked cohort (Supp Table S5)
+        06_lvh_secondary.sql      LV-hypertrophy at higher grades, locked cohort (Supp Table S2)
 code/   run_inference.py          WFDB -> released-model adapter + inference
         s3_download.py            parallel S3 download of paired waveforms
         smoke_test.py             25-ECG end-to-end pipeline check vs official module
         analyze.py                discrimination (boot CI), calibration, composite recalibration, fairness
         recalibration_per_label.py  per-label OOF-Platt recalibration (Supp Table S4)
-        lvh_secondary.py          LVH discrimination at higher grades, locked cohort (Supp Table S5)
+        lvh_secondary.py          LVH discrimination at higher grades, locked cohort (Supp Table S2)
         sensitivity.py, atrial_sens.py, calib_robust.py   sensitivity + calibration robustness (Supp Table S2)
         supplement_s2.py          Supp Table S2 (sensitivity with Brier/slope/CIL)
         echonext_mini_table1.py   EchoNext-Mini cohort column for the Table 1 comparison
@@ -39,7 +39,7 @@ code/   run_inference.py          WFDB -> released-model adapter + inference
         figures.py                optional supplementary plots (forest, subgroup)
 docs/   DECISIONS_AND_RATIONALE.md   every label/method choice + the alternative tested
         supplement_label_definitions.md  Table S1 (label harmonization + cohort prevalence comparison)
-        supplement_table_S2.md / S3_missingness.md / S4_recalibration.md / S5_lvh_secondary.md
+        supplement_table_S2.md / S3_missingness.md / S4_recalibration.md
         TRIPOD_AI_checklist.md, PAPER2_HANDOFF.md
 results/ RESULTS_SUMMARY.md, PAPER1_RESULTS.md, *.json metrics, figures/ (PDF+PNG)
 ```
@@ -86,7 +86,7 @@ python code/recalibration_per_label.py
 python code/sensitivity.py ; python code/atrial_sens.py ; python code/calib_robust.py ; python code/supplement_s2.py
 bq query --use_legacy_sql=false < sql/05_missingness.sql        # Supp Table S3
 bq query --use_legacy_sql=false < sql/06_lvh_secondary.sql      # save -> lvh_secondary.csv, then:
-python code/lvh_secondary.py                                    # Supp Table S5 (secondary LVH)
+python code/lvh_secondary.py                                    # Supp Table S2 (secondary LVH)
 
 # 6. Figures (R)
 python code/fig2_calibration.py && Rscript code/fig2_calibration.R   # Figure 2
