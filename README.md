@@ -1,5 +1,7 @@
 # External Validation of EchoNext-Mini in MIMIC-IV
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20962995.svg)](https://doi.org/10.5281/zenodo.20962995)
+
 Independent external validation, recalibration, and fairness audit of the publicly released
 **EchoNext-Mini** ECG→structural-heart-disease (SHD) model on **MIMIC-IV** (n = 45,878 patients,
 one most-recent ECG per patient).
@@ -107,7 +109,7 @@ re-runs are bit-reproducible.
 ## Citation
 Cite the EchoNext-Mini paper (Hughes et al., NEJM AI 2026, DOI 10.1056/AIdbp2500516), the EchoNext model
 (Poterucha et al., Nature 2025, DOI 10.1038/s41586-025-09227-0), MIMIC-IV / MIMIC-IV-ECG / MIMIC-IV-ECHO
-(PhysioNet), and this repository (Zenodo DOI: TBD). See `CITATION.cff`.
+(PhysioNet), and this repository (Zenodo DOI: 10.5281/zenodo.20962995). See `CITATION.cff`.
 
 ## License
 Code: MIT (see `LICENSE`). Data are governed by the PhysioNet Credentialed Health Data License — not redistributed here.
