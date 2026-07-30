@@ -162,11 +162,14 @@ echocardiograms, restricted to records of high or medium ascertainment confidenc
 sourced solely from inpatient prescribing without corroborating home-medication evidence are
 excluded, as these reflect medication ordered during an admission rather than chronic therapy.
 
-Every note-derived mention is passed through a ConText negation and temporality classifier
-before contributing to exposure. Mentions classified as negated, discontinued, historical,
-planned, allergic or referring to another person are not counted. Mentions classified as
-temporarily held are retained, since interruption during an acute admission does not end
-chronic therapy.
+Note-derived mentions are resolved for assertion status before contributing to exposure.
+Mentions recorded as discontinued, as parse artefacts failing lexicon matching, or as
+as-needed rather than scheduled therapy are not counted. Mentions recorded as temporarily
+held are retained, since interruption during an acute admission does not end chronic therapy.
+These exclusions affect 0.75% of mineralocorticoid receptor antagonist mentions and are
+applied for correctness rather than because they materially alter exposure classification.
+The medication parser reads the structured admission medication list, which contains little
+narrative, so assertion ambiguity is uncommon by construction.
 
 Exposure is modelled as the proportion of interval admissions with an MRA recorded, and
 dichotomised at any exposure for the primary analysis. Dose intensity is derived from absolute
@@ -302,7 +305,12 @@ consent was waived because all data are deidentified.
 
 Single-centre data limit generalisability, and the population is weighted toward acute and
 critical care. Medication exposure is observed at admissions rather than continuously and
-reflects prescription rather than adherence, as outpatient dispensing is unavailable.
+reflects prescription rather than adherence, as outpatient dispensing is unavailable. Only
+the admission medication list is machine-readable in this dataset, so medication changes
+occurring during an admission are not observed; exposure is therefore prevalent rather than
+incident, and an initiator design with a defined time zero was not achievable. This is the
+principal design limitation of the progression analysis and the clearest target for future
+work.
 Readmission capture is limited to the contributing institution. MAC grading is a qualitative
 reader judgement, with an empirically estimated disagreement rate carried into sensitivity
 analysis. Mortality ascertainment is reliable within approximately one year of discharge.

@@ -318,6 +318,31 @@ leakage is confirmed as material and the note-only arm is reported as such rathe
 A ConText or NegEx pass over the note extraction would be the durable fix and would benefit
 every downstream use of the reconciliation pipeline, not only this study.
 
+**RESOLVED 2026-07-30. The concern above was overstated and is closed.** Direct measurement
+in `home_note_reparsed` shows 16 of 15,146 MRA mentions flagged held-or-stopped (0.11%), 72
+failing lexicon match (0.48%), and 25 as-needed. Total exclusions are 0.75% of mentions,
+which cannot move an odds ratio of 0.91.
+
+The reason the earlier inference failed is instructive. It was argued that visible
+`norm_ingredient` fragments were a sentinel for a larger invisible problem. They were not.
+The `section` field has exactly one value, `home`, so the parser reads the structured
+admission medication list rather than narrative text. Discontinuation language lives in the
+history of present illness and the assessment and plan, which this parser never reads. The
+fragments observed were spillover at the boundaries of the medication list and are as rare as
+they appeared.
+
+The pipeline already carries `is_held_or_stopped`, `is_held`, `drug_in_lexicon` and `is_prn`.
+These are not propagated into `MIMICIV_ADMISSION_MEDS_FINAL` or `gdmt_by_admission`, which
+remains a genuine defect worth fixing for downstream studies, but it is a correctness fix
+rather than one that changes this study's results.
+
+**No discharge medication section exists.** The parser captures only the admission list, so
+an initiator design with a defined time zero would require new extraction from the discharge
+medication section of `mimiciv_note.discharge`. Given that the crude Aim 3 estimate is null
+and initiators would form a smaller and less precisely estimated subgroup than the 644
+prevalent users already available, this is recorded as a limitation and a future direction
+rather than undertaken.
+
 ### 5.2.3 Exposure ascertainment by source (established 2026-07-30)
 
 Distribution of the 23,069 `is_mra` admission records by source and pipeline confidence:
@@ -621,7 +646,9 @@ de-identified.
 | 2026-07-30 | Ascertainment closed as an explanation for the Aim 3 null | Crude OR flat at 0.91, 0.91, 0.95 across three definitions of increasing specificity. Dilution by misclassification would have produced the opposite pattern | Further ascertainment sensitivity analyses (now unnecessary) |
 | 2026-07-30 | Baseline-grade heterogeneity withdrawn | Mild OR 0.86 (0.69-1.07) vs moderate 1.18 (0.75-1.86) on 26 events; intervals overlap heavily. The earlier reversal was noise, not a negation-bias artefact | Report as effect modification by baseline grade |
 | 2026-07-30 | Null not declared pending adjustment | Confounding by indication runs upward toward the null, so the adjusted estimate may sit below the crude 0.91. Declaring a negative result on crude data would be premature | Report the crude null as the finding |
-| 2026-07-30 | Negation cleaning promoted from optional to prerequisite for dose-response | Dose is note-derived (82-97% capture with note vs 4-7% without), so the only records supporting dose-response are the records carrying negation risk | Dose-response without negation handling |
+| 2026-07-30 | Negation concern closed as immaterial | Direct measurement: 0.11% of MRA mentions flagged held-or-stopped, 0.48% failing lexicon match, 0.75% excluded in total. The parser reads the structured admission medication list (`section` has one value, `home`), not narrative, so discontinuation language is out of scope by construction | Build a full ConText layer (drafted, then reduced to residual) |
+| 2026-07-30 | Initiator design not pursued | No discharge medication section exists; it would require new extraction from `mimiciv_note.discharge`. With a null crude estimate and a smaller resulting subgroup, the precision cost exceeds the bias reduction | Build discharge-medication extraction |
+| 2026-07-30 | Superseded: negation cleaning promoted from optional to prerequisite for dose-response | Dose is note-derived (82-97% capture with note vs 4-7% without), so the only records supporting dose-response are the records carrying negation risk | Dose-response without negation handling |
 | 2026-07-30 | Superseded: primary MRA exposure requires medrecon or rx corroboration | The note parser lacks negation detection and flags discontinued, held and historical mentions as exposed. Structured sources cannot express negation. Bias is differential and runs toward apparent MRA harm | Pool all sources; note-only (retained as sensitivity) |
 | 2026-07-30 | Interval defined by first and last GRADED echo | Pairing on all echoes discards patients whose endpoints happened to be blank, understating the cohort by 2,629 (4,025 vs 6,654) | First/last echo overall |
 | 2026-07-30 | Aim 3 estimated with IPTW plus outcome regression (doubly robust), not regression alone | Regression and propensity scores adjust for the same measured confounders; the case for IPTW is that it forces explicit positivity and balance diagnostics reviewers can inspect. Neither addresses unmeasured confounding, which is handled by E-value and control outcomes | Multivariable regression alone; propensity matching (discards data) |
