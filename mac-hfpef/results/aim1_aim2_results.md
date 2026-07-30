@@ -123,6 +123,70 @@ than a quality deficit, and must not be described as under-treatment.
 
 ---
 
+## Aim 4: MAC as a modifier of the MRA-mortality association
+
+Pre-specified, and pre-specified as underpowered. Mineralocorticoid receptor antagonist use
+was 6.8%, so the critical cell contains 139 patients and 37 deaths.
+
+### Crude, both outcomes
+
+| | no MRA | on MRA |
+|---|---|---|
+| **MAC none/mild**, deaths | 1,974 / 10,984 (18.0%) | 178 / 816 (21.8%) |
+| **MAC moderate/severe**, deaths | 574 / 2,102 (27.3%) | 37 / 139 (26.6%) |
+| **MAC none/mild**, mean DAOH | 314.9 days | 301.1 days |
+| **MAC moderate/severe**, mean DAOH | 293.6 days | 289.0 days |
+
+### Adjusted (n = 14,031)
+
+| Term | OR (95% CI) | p |
+|---|---|---|
+| MAC moderate/severe | 1.267 (1.126–1.426) | 0.0001 |
+| MRA | 1.328 (1.099–1.604) | 0.0033 |
+| **MAC x MRA interaction** | **0.622 (0.394–0.981)** | **0.041** |
+| RERI (additive scale) | −0.549 | — |
+
+Stratum-specific: MAC none/mild, MRA OR 1.325 (1.096–1.602); MAC moderate/severe, MRA OR
+0.860 (0.567–1.305).
+
+### This is not evidence of differential benefit
+
+**Neither stratum shows a protective association.** Among patients with moderate-to-severe
+MAC, mortality with and without an MRA is 26.6% versus 27.3%, and days alive and out of
+hospital are 289.0 versus 293.6. The interaction attains nominal significance because MRA
+appears *harmful* in the low-MAC stratum, not because it appears protective in the high-MAC
+stratum. A treatment-effect claim cannot rest on an interaction in which no arm shows
+benefit.
+
+**The pattern is what differential confounding by indication produces.** The main effect of
+MRA is OR 1.33, that is, higher mortality, which is expected in a population with an
+ejection fraction of 50% or greater during an era when mineralocorticoid receptor
+antagonists carried no such indication; prescription marked some other reason. Among
+patients with little or no calcification, who are younger with better renal function, that
+marker carries strong information about hidden severity. Among patients with
+moderate-to-severe calcification, who are older with worse renal function and already high
+risk, it carries much less. The interaction therefore plausibly measures how much
+confounding varies by stratum rather than how much drug effect varies by stratum. That
+explanation requires no biology and fits the data more economically.
+
+**Both outcomes replicate the same shape.** Mortality and days alive and out of hospital
+independently show MRA associated with worse outcomes at low MAC and approximate neutrality
+at high MAC. Consistency across endpoints argues for a common structural cause, which
+confounding supplies and effect modification does not.
+
+**Three further reasons for caution.** The critical cell holds 37 deaths, and interaction
+tests require roughly four times the sample of main effects. Approximately 18 comparisons
+were performed across the study, so one result at p = 0.041 is unremarkable; the protocol's
+decision not to adjust for multiplicity is weakest precisely here, on the most speculative
+aim. And the result is inconsistent with Aim 3, where mineralocorticoid receptor antagonist
+exposure showed no association with calcification progression across seven specifications.
+
+**Reported, not promoted.** The analysis was pre-specified and is reported in full. It is
+interpreted as hypothesis-generating at best, and the manuscript states that neither stratum
+demonstrated a protective association.
+
+---
+
 ## Summary of the study
 
 | Aim | Result |
@@ -132,7 +196,7 @@ than a quality deficit, and must not be described as under-treatment.
 | 1c. Diastolic phenotype | **Positive.** E/e′ 11.5 to 22.8, TR gradient 33.5 to 42.6 across grades |
 | 2. Therapy receipt | **Null** after adjustment for renal function |
 | 3. MRA exposure and MAC progression | **Null.** OR 0.94 (0.77–1.15); see `aim3_results.md` |
-| 4. MAC as effect modifier of MRA-mortality | Pending |
+| 4. MAC as effect modifier of MRA-mortality | **Not interpretable as benefit.** Nominal interaction 0.62 (0.39-0.98) with no protective association in either stratum; consistent with differential confounding |
 
 One positive primary with a clean dose-response and an interpretable threshold, one
 positive patient-centred secondary, a striking phenotype gradient, and two honest negatives.
