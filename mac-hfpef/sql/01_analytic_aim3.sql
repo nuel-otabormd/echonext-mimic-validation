@@ -9,14 +9,14 @@
 -- Dependencies: mimiciv_echo.structured_measurement, mimiciv_3_1_hosp.{patients,
 --               admissions,diagnoses_icd,labevents}, mimiciv_3_1_derived.charlson,
 --               2_MIMIC_IV_ADMISSION_MEDS.MIMICIV_ADMISSION_MEDS_FINAL
--- Output: the-project-476301.echonext_mac.aim3_analytic   (expect 6,654 rows)
+-- Output: the-project-476301.dhruv.aim3_analytic   (expect 6,654 rows)
 -- ============================================================
 --
 -- Export this table to CSV for the Python analysis. It is ~6,654 rows, well below any
 -- console export limit, but VERIFY THE ROW COUNT AFTER EXPORT against the CONSORT
 -- query at the foot of this file before analysing it.
 
-CREATE OR REPLACE TABLE `the-project-476301.echonext_mac.aim3_analytic` AS
+CREATE OR REPLACE TABLE `the-project-476301.dhruv.aim3_analytic` AS
 
 WITH
 -- ---------- 1. MAC grade per echo, graded studies only ----------
@@ -311,9 +311,9 @@ WITH echo_all AS (
 SELECT
   (SELECT COUNT(DISTINCT subject_id) FROM echo_all)                           AS s1_any_tte,
   (SELECT COUNT(DISTINCT subject_id) FROM echo_all WHERE mac_grade IS NOT NULL) AS s2_mac_graded_ever,
-  (SELECT COUNT(*) FROM `the-project-476301.echonext_mac.aim3_analytic`)      AS s6_analytic,
-  (SELECT COUNTIF(progressed = 1) FROM `the-project-476301.echonext_mac.aim3_analytic`) AS s7_events,
-  (SELECT COUNTIF(mra_exposed = 1) FROM `the-project-476301.echonext_mac.aim3_analytic`) AS s8_exposed,
+  (SELECT COUNT(*) FROM `the-project-476301.dhruv.aim3_analytic`)      AS s6_analytic,
+  (SELECT COUNTIF(progressed = 1) FROM `the-project-476301.dhruv.aim3_analytic`) AS s7_events,
+  (SELECT COUNTIF(mra_exposed = 1) FROM `the-project-476301.dhruv.aim3_analytic`) AS s8_exposed,
   (SELECT COUNTIF(mra_exposed = 1 AND progressed = 1)
-     FROM `the-project-476301.echonext_mac.aim3_analytic`)                    AS s9_events_exposed;
+     FROM `the-project-476301.dhruv.aim3_analytic`)                    AS s9_events_exposed;
 */
