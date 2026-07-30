@@ -36,7 +36,8 @@ medication across the inter-echocardiogram interval, restricted to records of hi
 ascertainment confidence. The primary progression analysis uses logistic regression with inverse
 probability of treatment weighting and doubly robust estimation, adjusted for baseline MAC
 grade and interval length. Survival analyses use Cox proportional hazards; therapy receipt
-uses modified Poisson regression with robust variance.
+uses modified Poisson regression with robust variance. All effect estimates are reported with
+95% confidence intervals.
 
 **Results.** To be completed.
 
@@ -270,18 +271,59 @@ plausible mineralocorticoid pathway is specified before analysis, where a non-nu
 indicates residual confounding. E-values are computed for the primary Aim 3 and Aim 4
 estimates.
 
+**Interval estimation.** Every effect estimate is reported as a point estimate with a 95%
+confidence interval, and inference is based on the interval rather than on the p-value alone.
+Hazard ratios, risk ratios, odds ratios and the relative excess risk due to interaction are
+each accompanied by intervals; absolute measures, including progression risk by exposure group
+and days alive and out of hospital, are reported with intervals on the absolute scale so that
+clinical magnitude is visible alongside relative effect.
+
+Interval construction is method-specific, because several of the estimators above would give
+incorrect coverage with naive standard errors:
+
+- **Inverse probability weighted and doubly robust estimates (Aim 3):** naive standard errors
+  understate uncertainty because they treat the estimated weights as fixed. Intervals are
+  obtained by nonparametric bootstrap over the entire procedure, refitting the propensity
+  model within each of 2,000 replicates, with a robust sandwich estimator reported alongside
+  as a conservative comparator.
+- **Modified Poisson regression (Aim 2):** robust sandwich variance, which is intrinsic to the
+  method.
+- **Relative excess risk due to interaction (Aim 4):** bootstrap intervals, as the delta method
+  performs poorly for RERI at the sample sizes here.
+- **Quantile regression for days alive and out of hospital (Aim 1):** bootstrap intervals.
+- **Cox models (Aims 1 and 4):** profile likelihood intervals.
+- **After multiple imputation:** within- and between-imputation variance combined by Rubin's
+  rules before interval construction, never by pooling intervals computed per imputation.
+- **E-values:** computed for the point estimate and, separately, for the confidence limit
+  closest to the null, since the latter is what bounds the evidence.
+
 All tests are two-sided at the 5% level. No adjustment for multiplicity is applied across the
 four objectives, which are treated as separate pre-specified questions rather than as a family;
-this is stated explicitly and secondary outcomes are reported as exploratory.
+this is stated explicitly and secondary outcomes are reported as exploratory. Because intervals
+are unadjusted for multiplicity, secondary and sensitivity estimates are interpreted as
+descriptive of precision rather than as confirmatory tests.
 
 ## 9. Sample Size
 
-No formal power calculation is performed, as the cohort is fixed by data availability. The
-longitudinal cohort comprises 6,654 patients with 1,607 progression events, of whom 644 are
-MRA-exposed under the primary definition contributing 146 events. This supports estimation of
-moderate associations with confidence intervals excluding large effects, and is stated as a
-precision constraint rather than presented as adequate power for small effects. The events per
-variable ratio permits generous covariate adjustment.
+No formal power calculation is performed, as the cohort is fixed by data availability. Sample
+size is therefore reported as achievable precision rather than as power against a hypothesised
+effect.
+
+The longitudinal cohort comprises 6,654 patients with 1,607 progression events, of whom 644
+are MRA-exposed under the primary exposure definition, contributing 146 events. Progression
+occurred in 22.7% of exposed and 24.4% of unexposed patients, giving an unadjusted odds ratio
+of 0.91 with a 95% confidence interval of 0.75 to 1.11. That interval is the study's realistic
+precision: it excludes relative reductions greater than approximately 25% and relative
+increases greater than approximately 11%, and cannot resolve associations smaller than that.
+The adjusted interval is expected to be comparable or modestly wider.
+
+Precision under the alternative exposure definitions is correspondingly lower, at 447 exposed
+with 104 events when admission medication reconciliation is required, and 160 exposed with 33
+events in the target-dose stratum, where the interval spans 0.55 to 1.20. The dose-response
+analysis is therefore explicitly underpowered and is designated hypothesis-generating on that
+basis rather than after the fact.
+
+The events per variable ratio permits generous covariate adjustment without overfitting.
 
 ## 10. Sensitivity Analyses
 
