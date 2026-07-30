@@ -1,5 +1,20 @@
 # Analysis Plan: Mitral Annular Calcification as a Therapeutic Phenotype in Heart Failure
 
+**Working title.** Mitral Annular Calcification as a Therapeutic Phenotype in Heart Failure
+with Preserved Ejection Fraction: Severity-Graded Characterisation, Outcomes, and
+Mineralocorticoid Receptor Antagonist Exposure.
+**Running title.** MAC as a therapeutic phenotype in HFpEF.
+
+Two conditional alternates. If Aim 3 delivers, lead with it: "Mineralocorticoid Receptor
+Antagonist Exposure and Progression of Mitral Annular Calcification: A Structured
+Echocardiographic Cohort Study in MIMIC-IV." If Aim 3 fails on exposure ascertainment, fall
+back to the phenotype paper: "Severity-Graded Mitral Annular Calcification in HFpEF:
+Diastolic Phenotype, Treatment Gaps, and One-Year Outcomes."
+
+No title variant uses "effect of," "impact of," or any causal verb. The design cannot support
+a causal reading and a title implying one invites reviewers to judge it by a standard it will
+fail.
+
 ## Version: 0.1 (DRAFT, pending feasibility confirmation)
 ## Date: 2026-07-30
 ## Author: Emmanuel Otabor, MD
@@ -8,19 +23,25 @@
 
 ## 0. Status and open items
 
-This plan is a draft. Three feasibility queries are outstanding and two aims are
-conditional on their results:
+All feasibility queries are complete except one. Two aims were restructured and one exposure
+was dropped on the basis of what they returned.
 
-| Outstanding query | Gates | Status |
+| Feasibility query | Gates | Status |
 |---|---|---|
-| MAC grade transition matrix (4x4, first vs last echo) | Aim 3 measurement validity | **RUN 2026-07-30, see 10.1** |
-| Recording rate by year | Aim 3 incident analysis | **RUN 2026-07-30, uninformative by design, see 10.2** |
-| SGLT2i / MRA prescription counts in MIMIC-IV | SGLT2i inclusion throughout | NOT RUN |
-| `2_MIMIC_IV_ADMISSION_MEDS` schema | Exposure definition, all aims | NOT RUN |
+| MAC grade transition matrix (4x4) | Aim 3 measurement validity | RUN 2026-07-30, see 10.1 |
+| Recording rate by year | Aim 3 incident analysis | RUN 2026-07-30, uninformative by design, see 10.2 |
+| SGLT2i / MRA exposure in the Aim 3 cohort | SGLT2i inclusion throughout | RUN 2026-07-30, SGLT2i dropped, see 5.2 |
+| `2_MIMIC_IV_ADMISSION_MEDS` schema | Exposure definition, all aims | RUN 2026-07-30, see 5.2 |
+| MRA exposure via `gdmt_by_admission` (home meds) | Aim 3 exposure definition and precision | **PENDING** |
 
-The transition matrix triggered the pre-specified failure condition in Section 10.1 and
-Aim 3 has been restructured accordingly. The incident MAC analysis has been **dropped**
-(Section 10.2), not merely suspended.
+Two structural changes resulted. The transition matrix triggered the pre-specified failure
+condition in Section 10.1, so Aim 3 was restructured and the incident MAC analysis
+**dropped** (Section 10.2). The exposure query found SGLT2i effectively absent, so this is
+now an **MRA study** (Section 5.2).
+
+The single pending query re-derives MRA exposure from reconciled home medications rather than
+inpatient orders. It sets the events-in-exposed count and therefore the precision of the
+study's only novel aim.
 
 ---
 
@@ -134,13 +155,24 @@ sample for no scientific gain.
 
 | Aim | At risk | Events |
 |---|---|---|
-| 3 PRIMARY, progression, graded at both timepoints, baseline mild or moderate | 4,025 | 1,172 (29.1%) |
-| 3 SUSPENDED, incident MAC (baseline grade 0) | 16,480 | 3,893 (23.6%) |
+| 3 PRIMARY, progression, first and last GRADED echo, baseline mild or moderate | 6,654 | 1,607 (24.1%) |
+| 3 DROPPED, incident MAC (baseline grade 0) | 16,480 | 3,893 (23.6%) |
+| 3 exposed (MRA ever, inpatient-order definition) | 969 | approx. 234 |
+| 3 exposed (SGLT2i, any) | 54 | dropped, see 5.2 |
 | 1, 2, 4 (HFpEF with MAC) | TBC, approx. 41,800 echoes have MAC with EF above 45 | TBC |
 
 **Progression among patients graded at both timepoints is the primary Aim 3 analysis.**
 It is smaller than the incident cohort but is the only one of the two with a defensible
 denominator.
+
+**Pairing rule, corrected 2026-07-30.** The interval runs from a patient's first to last
+**graded** echocardiogram, not first to last echocardiogram overall. Pairing on all studies
+discards patients whose first or last happened to be blank, understating the cohort by 2,629
+(4,025 versus the correct 6,654). One consequence to note in limitations: requiring a graded
+follow-up study conditions on the outcome being ascertainable, so patients whose MAC ceased
+to be recorded are excluded. Sensitivity analysis 3 (varying the interval) partly probes this.
+Interval length must enter the model, since a longer interval mechanically permits more
+progression.
 
 The incident MAC analysis is suspended. Baseline grade 0 conflates "no MAC" with "not
 assessed," so the 16,480 at-risk cohort contains an unknown number of patients with
@@ -184,10 +216,30 @@ review. Fallback: `physionet-data.mimiciv_3_1_hosp.prescriptions`, matching spir
 eplerenone and finerenone (MRA) and empagliflozin, dapagliflozin, canagliflozin,
 ertugliflozin and sotagliflozin (SGLT2i).
 
-**Finerenone will be absent** from MIMIC-IV's era. SGLT2i entered practice around 2014 and
-received its HFpEF indication in 2022, so counts may be too low to support any SGLT2i
-analysis. If so, this becomes an MRA study and says so explicitly rather than reporting an
-underpowered SGLT2i arm.
+**Finerenone is absent** from MIMIC-IV's era by construction.
+
+**SGLT2i is excluded as an exposure. Decided 2026-07-30 on data, not assumption.** In the
+Aim 3 progression cohort (n = 6,654), only 54 patients had any SGLT2i exposure across the
+inter-echo interval (43 at baseline mild, 11 at baseline moderate). This is an absent
+exposure rather than an underpowered one, consistent with SGLT2i entering practice around
+2014 and receiving its HFpEF indication in 2022. **This is an MRA study.** SGLT2i counts will
+be reported once in the cohort description so readers can see why, and no SGLT2i estimate
+will be presented.
+
+**Primary exposure source is `gdmt_by_admission.mra`**, not
+`mimiciv_3_1_hosp.prescriptions`. The distinction is material: `prescriptions` records
+inpatient orders, whereas the reconciliation pipeline reconstructs home medication from note,
+medrecon and rx with a confidence grade. For a calcification process unfolding over years the
+relevant exposure is chronic outpatient therapy, not what was ordered during an admission.
+
+**Dose intensity.** `gdmt_by_admission.mra_maxcap` identifies therapy at maximum or target
+dose, enabling a pre-specified dose-response secondary analysis (none versus any MRA versus
+maximum-dose MRA, tested for trend). Dose-response is a Bradford Hill criterion and
+materially strengthens a non-randomised exposure claim.
+
+**Ascertainment quality.** `has_note`, `has_medrecon` and `has_rx` per admission permit a
+sensitivity analysis restricted to admissions where home medication was fully ascertainable,
+rather than assuming uniform capture.
 
 ### 5.3 The Aim 3 exposure problem
 
@@ -429,6 +481,10 @@ de-identified.
 | 2026-07-30 | Mitral valve intervention excluded through follow-up, not only at baseline | An annuloplasty ring or prosthesis placed between echoes removes the gradable native annulus and manufactures apparent regression | Baseline-only exclusion |
 | 2026-07-30 | 7.8% regression rate retained as a quantitative bias parameter | An empirical misclassification estimate is more useful bounding the primary estimate than as a limitations-section sentence | Report as a limitation only |
 | 2026-07-30 | Incident MAC analysis dropped, not suspended | No era ascertains MAC completely (flat ~31% graded rate throughout), and the field cannot distinguish absence from silence at all. Mild MAC is omitted 43.9% of the time | Restrict to a high-recording era; impute baseline MAC status; retain with heavy caveats |
+| 2026-07-30 | SGLT2i dropped as an exposure | Only 54 of 6,654 Aim 3 cohort patients had any SGLT2i exposure. Absent, not underpowered; consistent with 2014 market entry and a 2022 HFpEF indication against MIMIC-IV's 2008-2022 span | Retain as a secondary exposure with wide CIs; restrict cohort to the late era |
+| 2026-07-30 | Exposure from `gdmt_by_admission.mra`, not `mimiciv_3_1_hosp.prescriptions` | `prescriptions` records inpatient orders; the reconciliation pipeline reconstructs chronic home therapy from note, medrecon and rx. A multi-year calcification process is driven by outpatient exposure | Raw prescriptions; medrecon alone |
+| 2026-07-30 | Dose-response secondary added using `mra_maxcap` | Dose-response is a Bradford Hill criterion and strengthens a non-randomised exposure claim at no extra data cost | Binary exposure only |
+| 2026-07-30 | Interval defined by first and last GRADED echo | Pairing on all echoes discards patients whose endpoints happened to be blank, understating the cohort by 2,629 (4,025 vs 6,654) | First/last echo overall |
 | 2026-07-30 | Aim 3 estimated with IPTW plus outcome regression (doubly robust), not regression alone | Regression and propensity scores adjust for the same measured confounders; the case for IPTW is that it forces explicit positivity and balance diagnostics reviewers can inspect. Neither addresses unmeasured confounding, which is handled by E-value and control outcomes | Multivariable regression alone; propensity matching (discards data) |
 | 2026-07-30 | Baseline severe MAC excluded from progression analysis only | Ceiling effect, 0 of 170 progressed because no higher grade exists | Collapse moderate and severe; treat severe as its own outcome state |
 | 2026-07-30 | Aim 3 population not restricted to HFpEF | MR-calcification biology is not HFpEF specific; restriction would discard most of the at-risk sample for no gain | Restrict all aims to HFpEF for consistency |
