@@ -1,9 +1,9 @@
 # Study Protocol
 
-## Mitral Annular Calcification as a Therapeutic Phenotype in Heart Failure with Preserved Ejection Fraction: Severity-Graded Characterisation, Outcomes, and Mineralocorticoid Receptor Antagonist Exposure
+## Moderate-to-Severe, but Not Mild, Mitral Annular Calcification Is Independently Associated with One-Year Mortality in Heart Failure with Preserved Ejection Fraction
 
-**Running title:** MAC as a therapeutic phenotype in HFpEF
-**Version:** 1.0
+**Running title:** Graded mitral annular calcification and outcomes in HFpEF
+**Version:** 2.0 (results incorporated)
 **Date:** 2026-07-30
 **Author:** Emmanuel Otabor, MD
 **Reporting guideline:** STROBE, with the RECORD extension for routinely collected health data
@@ -28,20 +28,37 @@ mineralocorticoid receptor antagonist (MRA) exposure and echocardiographic MAC p
 and to test whether MAC modifies the association between MRA exposure and mortality.
 
 **Methods.** Retrospective cohort study in MIMIC-IV v3.1 linked to MIMIC-IV-ECHO structured
-echocardiographic measurements. MAC severity is taken from a structured field graded mild,
-moderate or severe, available on 52,809 of 179,928 transthoracic echocardiograms across
-85,292 patients. The longitudinal cohort comprises 6,654 patients with MAC explicitly graded
-on two studies at least 365 days apart. MRA exposure is derived from reconciled home
-medication across the inter-echocardiogram interval, restricted to records of high or medium
-ascertainment confidence. The primary progression analysis uses logistic regression with inverse
-probability of treatment weighting and doubly robust estimation, adjusted for baseline MAC
-grade and interval length. Survival analyses use Cox proportional hazards; therapy receipt
-uses modified Poisson regression with robust variance. All effect estimates are reported with
-95% confidence intervals.
+echocardiographic measurements, in which MAC is graded mild, moderate or severe. The primary
+cohort comprised 14,041 adults with a heart failure diagnosis, an ejection fraction of 50% or
+greater, and a transthoracic echocardiogram performed during a hospital admission, anchored
+on the first such admission so that mortality ascertainment is complete by construction. The
+primary outcome was one-year all-cause mortality from index discharge and the secondary
+outcome was days alive and out of hospital. A separate cohort of 4,329 patients with MAC
+graded on two echocardiograms at least one year apart was used to examine calcification
+progression. Estimates were adjusted for age, sex, estimated glomerular filtration rate,
+ejection fraction, comorbidity, atrial fibrillation, diabetes, chronic pulmonary disease,
+intensive care admission, length of stay and race, and are reported with 95% confidence
+intervals.
 
-**Results.** To be completed.
+**Results.** MAC was present in 45.0% of the primary cohort (mild 29.1%, moderate 13.2%,
+severe 2.7%). One-year mortality was 19.7% overall and rose across grades from 16.6% to
+32.5%. Adjusted odds of death increased 1.11-fold per grade (95% CI 1.05 to 1.17), but the
+association was confined to higher grades: mild 1.01 (0.91 to 1.13), moderate 1.17 (1.02 to
+1.34), severe 1.60 (1.26 to 2.03). Days alive and out of hospital fell by 4.08 per grade
+(−6.49 to −1.66). The ratio of early mitral inflow to annular velocity rose from 11.5 to 22.8
+and the tricuspid regurgitant gradient from 33.5 to 42.6 mmHg across grades. MAC was not
+independently associated with receipt of mineralocorticoid receptor antagonist therapy (0.95
+per grade, 0.87 to 1.04), and such exposure was not associated with calcification progression
+(0.94, 0.77 to 1.15). A nominal interaction between MAC and therapy on mortality (0.62, 0.39
+to 0.98) was accompanied by no protective association in either stratum.
 
-**Conclusions.** To be completed.
+**Conclusions.** In hospitalised patients with heart failure and preserved ejection fraction,
+moderate-to-severe but not mild mitral annular calcification was independently associated
+with one-year mortality and with fewer days alive and out of hospital, and tracked estimated
+filling and pulmonary pressures. Because mild disease carried no independent prognostic
+information, binary ascertainment of the kind supported by diagnosis codes is uninformative
+in this population. No evidence was found that calcification identifies an opportunity for
+mineralocorticoid receptor antagonist therapy.
 
 ---
 
