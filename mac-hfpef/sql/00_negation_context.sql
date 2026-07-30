@@ -72,8 +72,7 @@ windowed AS (
 
 flagged AS (
   SELECT
-    * EXCEPT(win),
-    win,
+    *,
     -- DISCONTINUED: the drug was being taken and has been formally stopped.
     REGEXP_CONTAINS(win, r"\b(d/?c'?d|dc'?d|d/c|discontinu\w*|stopped|stop taking|"
                        || r"no longer (taking|on)|came off|taken off|ceased|"
@@ -117,6 +116,9 @@ SELECT
   in_note, in_medrecon, in_rx, home_med_confidence, is_mra,
   mod_discontinued, mod_held, mod_negated, mod_historical,
   mod_planned, mod_allergy, mod_other_person, mod_uncertain,
+  -- Retained so the validation sampler below can show a reviewer the text the
+  -- classifier actually saw. Without it manual review is impossible.
+  win AS context_window,
 
   -- Assertion status. Order matters: the most decisive exclusions are tested first,
   -- and HELD is tested AFTER discontinued so that "held then discontinued" resolves
@@ -172,7 +174,7 @@ FROM flagged;
 -- almost no allergy or other_experiencer cases.
 -- ============================================================
 
--- SELECT assertion, hadm_id, norm_ingredient, is_current_home_med, win
+-- SELECT assertion, hadm_id, norm_ingredient, is_current_home_med, context_window
 -- FROM `the-project-476301.2_MIMIC_IV_ADMISSION_MEDS.med_mention_context`
 -- WHERE is_mra
 -- QUALIFY ROW_NUMBER() OVER (PARTITION BY assertion ORDER BY FARM_FINGERPRINT(
