@@ -32,8 +32,8 @@ echocardiographic measurements. MAC severity is taken from a structured field gr
 moderate or severe, available on 52,809 of 179,928 transthoracic echocardiograms across
 85,292 patients. The longitudinal cohort comprises 6,654 patients with MAC explicitly graded
 on two studies at least 365 days apart. MRA exposure is derived from reconciled home
-medication across the inter-echocardiogram interval, with assertion status resolved by a
-ConText negation pass. The primary progression analysis uses logistic regression with inverse
+medication across the inter-echocardiogram interval, restricted to records of high or medium
+ascertainment confidence. The primary progression analysis uses logistic regression with inverse
 probability of treatment weighting and doubly robust estimation, adjusted for baseline MAC
 grade and interval length. Survival analyses use Cox proportional hazards; therapy receipt
 uses modified Poisson regression with robust variance.
