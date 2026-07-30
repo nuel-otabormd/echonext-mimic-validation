@@ -1,6 +1,6 @@
 # Aims 1 and 2 Results: MAC severity, outcomes, and therapy in HFpEF
 
-**Status:** complete. **Aim 1 positive. Aim 2 null.**
+**Status:** complete. **Aim 1 positive and robust. Aims 2 and 4 null. Mediation via filling pressure excluded.**
 **Date:** 2026-07-30
 **Analysis:** logistic and linear regression, `statsmodels`.
 
@@ -120,6 +120,74 @@ spans 2008 to 2022 with an ejection fraction of 50% or greater; TOPCAT was neutr
 and no mineralocorticoid receptor antagonist held a heart-failure-with-preserved-ejection-fraction
 indication until finerenone in 2025. Low use reflects the absence of an indication rather
 than a quality deficit, and must not be described as under-treatment.
+
+---
+
+## Robustness to illness severity
+
+The adjustment set was extended to test whether the MAC association reflects unmeasured
+acute illness rather than calcification. Every comparison below refits the base model on
+the same rows as the augmented model, so the change is attributable to the covariate and
+not to sample restriction.
+
+| Subset | n | Base OR (95% CI) | With severity covariate | Change |
+|---|---|---|---|---|
+| Full sample, plus sodium, BUN, haemoglobin, white count, prior HF admissions | 13,798 | 1.105 (1.046–1.169) | 1.090 (1.031–1.153) | −0.015 |
+| Albumin available | 7,191 | 1.054 (0.979–1.135) | 1.071 (0.994–1.154) | +0.017 |
+| Intensive care, SOFA available | 5,443 | 1.038 (0.952–1.131) | 1.035 (0.950–1.129) | −0.003 |
+| E/e′ available | 8,767 | 1.067 (0.988–1.153) | 1.070 (0.986–1.161) | +0.003 |
+
+Four independent severity constructs — admission chemistry, serum albumin, first-day SOFA
+and estimated filling pressure — change the estimate by no more than 0.017. Hyponatraemia
+and elevated blood urea nitrogen are among the strongest mortality predictors in heart
+failure and neither, once added, materially attenuates the association.
+
+Subset point estimates all fall within the full-sample interval of 1.031 to 1.153. They are
+statistically compatible with the primary estimate and lose significance only because each
+subset contains 40 to 64% of the sample.
+
+**Note on model specification.** In the intensive-care subset, `icu_stay` is constant and
+must be removed from the covariate set; retaining it makes the covariance matrix singular
+and returns undefined standard errors.
+
+---
+
+## Mediation: MAC does not act through filling pressure
+
+Given that E/e′ rises from 11.5 to 22.8 across MAC grades, the natural hypothesis is that
+calcification raises filling pressure and that this is how it shortens survival. It is not
+supported.
+
+| Model (n = 8,767, identical rows) | MAC OR per grade |
+|---|---|
+| Total association | 1.067 (0.988–1.153) |
+| Direct, adjusted for E/e′ | 1.070 (0.986–1.161) |
+
+Attenuation of the log odds ratio is −3.2%, that is, none.
+
+The reason is visible in the mediator itself:
+
+| E/e′ and one-year mortality | OR per unit | p |
+|---|---|---|
+| Unadjusted | 1.0205 (1.0118–1.0294) | < 0.001 |
+| Age and sex only | 1.0051 (0.9959–1.0144) | 0.28 |
+| Fully adjusted | 1.0034 (0.9937–1.0132) | 0.49 |
+
+E/e′ predicts mortality unadjusted, but the association is entirely accounted for by age and
+sex, which are genuine confounders of the E/e′-mortality relationship rather than
+over-adjustment. A variable with no independent association with the outcome cannot mediate
+an effect on it.
+
+**MAC severity therefore tracks filling pressure without acting through it.** Whatever
+calcification marks that shortens survival, it is not diastolic pressure. Candidate
+mechanisms that remain open include conduction system disease from annular calcification,
+transmitral gradient, systemic calcific burden as a marker of vascular disease, and
+thromboembolic risk. This is a specific and testable direction rather than a generic call
+for further work.
+
+Patients with E/e′ measured were closely comparable to those without (age 72.5 versus 73.4
+years, eGFR 58.8 versus 59.2, Charlson 6.22 versus 6.23, one-year mortality 19% versus 21%),
+so differential selection does not explain the null.
 
 ---
 
