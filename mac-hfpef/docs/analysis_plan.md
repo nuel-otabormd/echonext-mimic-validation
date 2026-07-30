@@ -32,16 +32,33 @@ was dropped on the basis of what they returned.
 | Recording rate by year | Aim 3 incident analysis | RUN 2026-07-30, uninformative by design, see 10.2 |
 | SGLT2i / MRA exposure in the Aim 3 cohort | SGLT2i inclusion throughout | RUN 2026-07-30, SGLT2i dropped, see 5.2 |
 | `2_MIMIC_IV_ADMISSION_MEDS` schema | Exposure definition, all aims | RUN 2026-07-30, see 5.2 |
-| MRA exposure via `gdmt_by_admission` (home meds) | Aim 3 exposure definition and precision | **PENDING** |
+| MRA exposure via `gdmt_by_admission` (home meds) | Aim 3 precision | RUN 2026-07-30, 644 exposed / 146 events, see 4.3 |
+| `mra` vs `mra_maxcap` cross-tabulation | Dose-response feasibility | RUN 2026-07-30, maxcap rejected as dose, see 5.2.1 |
+| MRA dose and ingredient normalisation | Dose-response feasibility | RUN 2026-07-30, negation leakage found, see 5.2.1 |
+| MRA exposure by ascertainment source (`in_note` / `in_medrecon` / `in_rx`) | Primary exposure definition | RUN 2026-07-30, see 5.2.3 |
+| Aim 3 re-estimated across three exposure definitions | Whether the null survives tightening | **PENDING** |
 
-Two structural changes resulted. The transition matrix triggered the pre-specified failure
+Three structural changes resulted. The transition matrix triggered the pre-specified failure
 condition in Section 10.1, so Aim 3 was restructured and the incident MAC analysis
 **dropped** (Section 10.2). The exposure query found SGLT2i effectively absent, so this is
-now an **MRA study** (Section 5.2).
+now an **MRA study** (Section 5.2). Inspection of the ingredient normalisation revealed
+negation leakage in note-derived exposure, so the primary exposure now requires structured
+corroboration (Section 5.2.1).
 
-The single pending query re-derives MRA exposure from reconciled home medications rather than
-inpatient orders. It sets the events-in-exposed count and therefore the precision of the
-study's only novel aim.
+### 0.1 Current standing of Aim 3
+
+Under the home-medication exposure definition, the crude association is null: 146 progression
+events among 644 exposed (22.7%) against roughly 24.3% unexposed, giving an unadjusted odds
+ratio near 0.91 with a confidence interval of approximately 0.75 to 1.11. The direction is
+also inconsistent across baseline grades, favouring MRA at mild but reversing at moderate.
+
+This must not be read as a settled negative result. Two identified biases sit between this
+number and an interpretable estimate: confounding by indication, which runs toward apparent
+MRA harm, and negation leakage in exposure ascertainment (Section 5.2.1), which runs the same
+way. Both are being addressed before any estimate is interpreted. The honest current position
+is that **Aim 3 is likely to yield a bounded null**, which remains a legitimate first human
+evaluation of a hypothesis resting on cell culture and uremic rat models, but which cannot
+carry the paper's headline. Section 14 addresses the resulting positioning.
 
 ---
 
@@ -271,6 +288,45 @@ leakage is confirmed as material and the note-only arm is reported as such rathe
 
 A ConText or NegEx pass over the note extraction would be the durable fix and would benefit
 every downstream use of the reconciliation pipeline, not only this study.
+
+### 5.2.3 Exposure ascertainment by source (established 2026-07-30)
+
+Distribution of the 23,069 `is_mra` admission records by source and pipeline confidence:
+
+| Confidence | note | medrecon | rx | Admissions | Dose captured |
+|---|---|---|---|---|---|
+| low | - | - | Y | 6,447 | 4.8% |
+| medium | Y | - | Y | 5,220 | 85.7% |
+| high | Y | Y | Y | 3,950 | 96.5% |
+| medium | Y | - | - | 3,260 | 82.5% |
+| high | Y | Y | - | 2,450 | 96.0% |
+| medium | - | Y | - | 1,529 | 4.0% |
+| medium | - | Y | Y | 213 | 6.6% |
+
+**Note-only records are 3,260 (14.1%)**, so negation exposure is bounded and materially
+smaller than the ingredient fragments implied. 85.9% carry structured corroboration.
+
+**The larger problem is the rx-only tier: 6,447 records (28.0%).** An MRA present in
+inpatient prescriptions with no home-medication entry and no note mention is a drug ordered
+during the admission, not chronic outpatient therapy. For an exposure required to span years
+between echoes this is a construct mismatch, not merely a low-quality record. The pipeline
+independently grades these `low` and captures a dose for only 4.8% of them.
+
+**The confidence grading is internally validated.** `high` records (note plus medrecon) show
+96% dose capture and a median of 50 mg, matching spironolactone's heart-failure target, while
+all other tiers sit at 25 mg.
+
+**Dose is note-derived.** Records with `in_note` show 82 to 97% dose capture; records without
+it show 4 to 7%. Dose-response analysis is therefore only possible within note-containing
+records, which are exactly the records carrying negation risk. A negation pass is a
+prerequisite for the dose-response secondary rather than an optional improvement.
+
+**Primary exposure definition: `home_med_confidence IN ('high','medium')`**, excluding the
+rx-only tier. Retains 72% of records and removes those measuring a different construct.
+Pre-specified sensitivity analyses: `in_medrecon` required (strictest), and all sources
+pooled (broadest, matching the earlier estimate). Concordance across the three is itself the
+diagnostic. A stable estimate as specificity tightens supports a genuine null; an estimate
+that moves indicates the pooled definition was diluted by misclassification.
 
 ### 5.2.2 Dose variables
 
@@ -532,7 +588,9 @@ de-identified.
 | 2026-07-30 | `mra_maxcap` REJECTED as a dose variable | Cross-tabulation shows zero `mra=true, maxcap=false` admissions: maxcap is a strict superset of mra, consistent with maximal-capture ascertainment rather than dose intensity | Use as dose-response secondary (proposed then withdrawn) |
 | 2026-07-30 | `mra_maxcap` retained as a broad-ascertainment sensitivity | Flags ~38% more admissions (22,996 vs 16,602), a genuine power lever, at a specificity cost that biases toward the null | Use as primary; discard entirely |
 | 2026-07-30 | Dose-response rebuilt on absolute mg from `MIMICIV_ADMISSION_MEDS_FINAL` | Real dose fields exist there; `standard_dose_share` is referenced to ~135 mg (ascites dosing), not the 25-50 mg heart-failure target | `standard_dose_share` as dose intensity |
-| 2026-07-30 | Primary MRA exposure requires medrecon or rx corroboration | The note parser lacks negation detection and flags discontinued, held and historical mentions as exposed. Structured sources cannot express negation. Bias is differential and runs toward apparent MRA harm | Pool all sources; note-only (retained as sensitivity) |
+| 2026-07-30 | Primary exposure narrowed to `home_med_confidence IN ('high','medium')`, excluding rx-only | rx-only (28.0% of records) is inpatient ordering, not chronic home therapy: a construct mismatch for a multi-year exposure, independently graded `low` by the pipeline with 4.8% dose capture | Require medrecon only (retained as sensitivity); pool all sources (retained as sensitivity) |
+| 2026-07-30 | Negation cleaning promoted from optional to prerequisite for dose-response | Dose is note-derived (82-97% capture with note vs 4-7% without), so the only records supporting dose-response are the records carrying negation risk | Dose-response without negation handling |
+| 2026-07-30 | Superseded: primary MRA exposure requires medrecon or rx corroboration | The note parser lacks negation detection and flags discontinued, held and historical mentions as exposed. Structured sources cannot express negation. Bias is differential and runs toward apparent MRA harm | Pool all sources; note-only (retained as sensitivity) |
 | 2026-07-30 | Interval defined by first and last GRADED echo | Pairing on all echoes discards patients whose endpoints happened to be blank, understating the cohort by 2,629 (4,025 vs 6,654) | First/last echo overall |
 | 2026-07-30 | Aim 3 estimated with IPTW plus outcome regression (doubly robust), not regression alone | Regression and propensity scores adjust for the same measured confounders; the case for IPTW is that it forces explicit positivity and balance diagnostics reviewers can inspect. Neither addresses unmeasured confounding, which is handled by E-value and control outcomes | Multivariable regression alone; propensity matching (discards data) |
 | 2026-07-30 | Baseline severe MAC excluded from progression analysis only | Ceiling effect, 0 of 170 progressed because no higher grade exists | Collapse moderate and severe; treat severe as its own outcome state |
