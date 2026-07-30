@@ -36,7 +36,7 @@ was dropped on the basis of what they returned.
 | `mra` vs `mra_maxcap` cross-tabulation | Dose-response feasibility | RUN 2026-07-30, maxcap rejected as dose, see 5.2.1 |
 | MRA dose and ingredient normalisation | Dose-response feasibility | RUN 2026-07-30, negation leakage found, see 5.2.1 |
 | MRA exposure by ascertainment source (`in_note` / `in_medrecon` / `in_rx`) | Primary exposure definition | RUN 2026-07-30, see 5.2.3 |
-| Aim 3 re-estimated across three exposure definitions | Whether the null survives tightening | **PENDING** |
+| Aim 3 re-estimated across three exposure definitions | Whether the null survives tightening | RUN 2026-07-30, null is robust, see 0.1 |
 
 Three structural changes resulted. The transition matrix triggered the pre-specified failure
 condition in Section 10.1, so Aim 3 was restructured and the incident MAC analysis
@@ -47,18 +47,47 @@ corroboration (Section 5.2.1).
 
 ### 0.1 Current standing of Aim 3
 
-Under the home-medication exposure definition, the crude association is null: 146 progression
-events among 644 exposed (22.7%) against roughly 24.3% unexposed, giving an unadjusted odds
-ratio near 0.91 with a confidence interval of approximately 0.75 to 1.11. The direction is
-also inconsistent across baseline grades, favouring MRA at mild but reversing at moderate.
+Crude, unadjusted association between MRA exposure and MAC progression, across four
+pre-specified exposure definitions of increasing specificity (n = 6,654; 1,607 events):
 
-This must not be read as a settled negative result. Two identified biases sit between this
-number and an interpretable estimate: confounding by indication, which runs toward apparent
-MRA harm, and negation leakage in exposure ascertainment (Section 5.2.1), which runs the same
-way. Both are being addressed before any estimate is interpreted. The honest current position
-is that **Aim 3 is likely to yield a bounded null**, which remains a legitimate first human
-evaluation of a hypothesis resting on cell culture and uremic rat models, but which cannot
-carry the paper's headline. Section 14 addresses the resulting positioning.
+| Exposure definition | Exposed | Events | Rate | Crude OR (95% CI) |
+|---|---|---|---|---|
+| Any source | 888 | 201 | 22.6% | 0.91 (0.77-1.07) |
+| High/medium confidence (primary) | 644 | 146 | 22.7% | 0.91 (0.75-1.11) |
+| Medrecon required | 447 | 104 | 23.3% | 0.95 (0.76-1.19) |
+| Dose 50 mg or above | 160 | 33 | 20.6% | 0.81 (0.55-1.20) |
+| Unexposed reference | 5,766 | 1,406 | 24.4% | - |
+
+**Ascertainment is excluded as an explanation for the null.** The estimate is flat as
+specificity tightens (0.91, 0.91, 0.95). Had exposure misclassification been diluting a real
+association, sharpening the definition would have strengthened the estimate; instead it
+drifts marginally toward the null. This question is closed and requires no further
+sensitivity work.
+
+**The earlier apparent reversal across baseline grades was noise.** Under the primary
+definition, mild gives OR 0.86 (0.69-1.07) and moderate 1.18 (0.75-1.86) on 26 events. The
+intervals overlap heavily. This must not be reported as heterogeneity, and the negation-bias
+explanation previously offered for it (Section 5.2.1) is no longer needed.
+
+**A weak dose gradient is the only directional signal**: 24.4% unexposed, 23.1% exposed below
+50 mg or unknown dose, 20.6% at 50 mg or above. Monotone and in the hypothesised direction,
+and dose-response is the pattern least easily explained by confounding, but the interval is
+wide and the comparator mixes genuinely low with unknown doses. Reported as a pre-specified
+secondary and framed as hypothesis-generating, not as a finding.
+
+**Confounding remains entirely unaddressed and the null must not yet be declared.** MRA users
+carry more severe heart failure, worse renal function and greater calcific burden, each an
+independent predictor of progression, so the bias runs upward toward or past the null. The
+adjusted estimate may therefore sit below 0.91. The crude analysis has served its purpose in
+excluding ascertainment; the adjusted analysis specified in Section 8 must run before any
+interpretation is offered.
+
+**Provisional positioning.** On current evidence the study leads with the phenotype and
+treatment-gap aims and reports Aim 3 as a well-powered first human evaluation finding no
+significant association, with bounds. This is the third title variant. The call is held open
+until adjustment: an adjusted estimate near 0.80 supported by the dose gradient would shift
+the framing from "no association" to "a signal consistent with the preclinical mechanism
+requiring prospective confirmation," which is the second title variant.
 
 ---
 
@@ -589,6 +618,9 @@ de-identified.
 | 2026-07-30 | `mra_maxcap` retained as a broad-ascertainment sensitivity | Flags ~38% more admissions (22,996 vs 16,602), a genuine power lever, at a specificity cost that biases toward the null | Use as primary; discard entirely |
 | 2026-07-30 | Dose-response rebuilt on absolute mg from `MIMICIV_ADMISSION_MEDS_FINAL` | Real dose fields exist there; `standard_dose_share` is referenced to ~135 mg (ascites dosing), not the 25-50 mg heart-failure target | `standard_dose_share` as dose intensity |
 | 2026-07-30 | Primary exposure narrowed to `home_med_confidence IN ('high','medium')`, excluding rx-only | rx-only (28.0% of records) is inpatient ordering, not chronic home therapy: a construct mismatch for a multi-year exposure, independently graded `low` by the pipeline with 4.8% dose capture | Require medrecon only (retained as sensitivity); pool all sources (retained as sensitivity) |
+| 2026-07-30 | Ascertainment closed as an explanation for the Aim 3 null | Crude OR flat at 0.91, 0.91, 0.95 across three definitions of increasing specificity. Dilution by misclassification would have produced the opposite pattern | Further ascertainment sensitivity analyses (now unnecessary) |
+| 2026-07-30 | Baseline-grade heterogeneity withdrawn | Mild OR 0.86 (0.69-1.07) vs moderate 1.18 (0.75-1.86) on 26 events; intervals overlap heavily. The earlier reversal was noise, not a negation-bias artefact | Report as effect modification by baseline grade |
+| 2026-07-30 | Null not declared pending adjustment | Confounding by indication runs upward toward the null, so the adjusted estimate may sit below the crude 0.91. Declaring a negative result on crude data would be premature | Report the crude null as the finding |
 | 2026-07-30 | Negation cleaning promoted from optional to prerequisite for dose-response | Dose is note-derived (82-97% capture with note vs 4-7% without), so the only records supporting dose-response are the records carrying negation risk | Dose-response without negation handling |
 | 2026-07-30 | Superseded: primary MRA exposure requires medrecon or rx corroboration | The note parser lacks negation detection and flags discontinued, held and historical mentions as exposed. Structured sources cannot express negation. Bias is differential and runs toward apparent MRA harm | Pool all sources; note-only (retained as sensitivity) |
 | 2026-07-30 | Interval defined by first and last GRADED echo | Pairing on all echoes discards patients whose endpoints happened to be blank, understating the cohort by 2,629 (4,025 vs 6,654) | First/last echo overall |
