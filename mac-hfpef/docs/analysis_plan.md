@@ -14,13 +14,13 @@ conditional on their results:
 | Outstanding query | Gates | Status |
 |---|---|---|
 | MAC grade transition matrix (4x4, first vs last echo) | Aim 3 measurement validity | **RUN 2026-07-30, see 10.1** |
-| Recording rate by era (`pct_graded_of_assessed`) | Aim 3 incident analysis | NOT RUN |
+| Recording rate by year | Aim 3 incident analysis | **RUN 2026-07-30, uninformative by design, see 10.2** |
 | SGLT2i / MRA prescription counts in MIMIC-IV | SGLT2i inclusion throughout | NOT RUN |
 | `2_MIMIC_IV_ADMISSION_MEDS` schema | Exposure definition, all aims | NOT RUN |
 
 The transition matrix triggered the pre-specified failure condition in Section 10.1 and
-Aim 3 has been restructured accordingly. The incident MAC analysis is **suspended** pending
-the era recording-rate diagnostic.
+Aim 3 has been restructured accordingly. The incident MAC analysis has been **dropped**
+(Section 10.2), not merely suspended.
 
 ---
 
@@ -352,7 +352,49 @@ Progression exceeds regression 3.7-fold, and 7.8% is a plausible inter-reader di
 rate for a qualitative three-level scale. Aim 3 proceeds on the restricted cohort, with the
 7.8% carried forward as a quantified misclassification bound (Section 8).
 
-The incident MAC analysis does not survive this restriction and is suspended (Section 4.3).
+The incident MAC analysis does not survive this restriction. See Section 10.2.
+
+### 10.2 Why the incident MAC analysis was dropped
+
+A recording-rate-by-year diagnostic was run on 2026-07-30 to test whether any era ascertained
+MAC completely enough to interpret a blank field as true absence. **The diagnostic was
+uninformative by construction**, and this is worth recording so it is not repeated: because
+`mac_severity` has no negative token, "graded" and "MAC present" are the same event, so the
+computed rate measures MAC prevalence rather than ascertainment completeness. The data cannot
+distinguish "assessed, no MAC" from "not commented on."
+
+What the diagnostic did establish:
+
+1. The `mac_severity` field row is present on 100% of TTEs in every year. Blankness is a
+   reader decision, never a schema gap, so there is no structural era to exclude.
+2. The graded rate is flat at roughly 28 to 35%, centred near 31%, across all years carrying
+   meaningful volume. No period behaves differently.
+3. The mitral valve is assessed (`mv_leaflets` non-blank) on approximately 93% of studies, so
+   omission does not stem from an unevaluated valve.
+
+Note that `echo_year` is a **shifted** date. MIMIC-IV applies a random per-patient offset into
+2100 to 2200, so shifted year cannot identify a real calendar era; `patients.anchor_year_group`
+is the correct variable for real era. This does not change the conclusion.
+
+Combined with the transition matrix, the omission rate is grade dependent:
+
+| Baseline grade | Blank at follow-up | Rate |
+|---|---|---|
+| mild | 2,263 / 5,157 | 43.9% |
+| moderate | 162 / 1,293 | 12.5% |
+| severe | 23 / 170 | 13.5% |
+
+Mild MAC goes unmentioned nearly half the time. No cohort restriction repairs a baseline
+state defined by silence, so the incident analysis is **dropped** rather than left pending.
+
+**Two consequences that are useful rather than merely limiting.** The grade-specific rates
+above become quantified bias parameters for the progression analysis in Section 8. And for
+Aims 1 and 4, the missing-as-negative convention places a substantial share of true mild MAC
+into the reference group; non-differential misclassification of that kind attenuates
+associations toward the null, so observed estimates are more plausibly underestimates than
+artefacts. The assumption of non-differentiality is itself uncertain (if sicker patients
+receive more thorough studies, omission is differential) and must be stated in the
+limitations rather than assumed away.
 
 ---
 
@@ -386,6 +428,8 @@ de-identified.
 | 2026-07-30 | Blank treated as missing for longitudinal aims, negative for cross-sectional aims | Same field, different failure modes. Blank is uninformative for prevalence (no negative token exists) but actively misleading for transitions | Single convention across all aims |
 | 2026-07-30 | Mitral valve intervention excluded through follow-up, not only at baseline | An annuloplasty ring or prosthesis placed between echoes removes the gradable native annulus and manufactures apparent regression | Baseline-only exclusion |
 | 2026-07-30 | 7.8% regression rate retained as a quantitative bias parameter | An empirical misclassification estimate is more useful bounding the primary estimate than as a limitations-section sentence | Report as a limitation only |
+| 2026-07-30 | Incident MAC analysis dropped, not suspended | No era ascertains MAC completely (flat ~31% graded rate throughout), and the field cannot distinguish absence from silence at all. Mild MAC is omitted 43.9% of the time | Restrict to a high-recording era; impute baseline MAC status; retain with heavy caveats |
+| 2026-07-30 | Aim 3 estimated with IPTW plus outcome regression (doubly robust), not regression alone | Regression and propensity scores adjust for the same measured confounders; the case for IPTW is that it forces explicit positivity and balance diagnostics reviewers can inspect. Neither addresses unmeasured confounding, which is handled by E-value and control outcomes | Multivariable regression alone; propensity matching (discards data) |
 | 2026-07-30 | Baseline severe MAC excluded from progression analysis only | Ceiling effect, 0 of 170 progressed because no higher grade exists | Collapse moderate and severe; treat severe as its own outcome state |
 | 2026-07-30 | Aim 3 population not restricted to HFpEF | MR-calcification biology is not HFpEF specific; restriction would discard most of the at-risk sample for no gain | Restrict all aims to HFpEF for consistency |
 | 2026-07-30 | Efficacy framing rejected across all aims | Settled by randomised trials; observational re-estimation adds nothing and invites confounding-by-indication criticism | Direct comparative effectiveness analysis |
