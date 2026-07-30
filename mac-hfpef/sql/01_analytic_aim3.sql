@@ -16,7 +16,9 @@
 -- console export limit, but VERIFY THE ROW COUNT AFTER EXPORT against the CONSORT
 -- query at the foot of this file before analysing it.
 
-CREATE OR REPLACE TABLE `the-project-476301.dhruv.aim3_analytic` AS
+-- NOTE: the query is wrapped in parentheses. Without them BigQuery parses the WITH
+-- after AS as a DDL options clause and fails with "Expected keyword CONNECTION".
+CREATE OR REPLACE TABLE `the-project-476301.dhruv.aim3_analytic` AS (
 
 WITH
 -- ---------- 1. MAC grade per echo, graded studies only ----------
@@ -128,13 +130,14 @@ echo_params AS (
 -- ---------- 5. Comorbidity and renal function nearest the index study ----------
 -- Admission closest to t0 within one year, used to attach Charlson and labs.
 adm_near AS (
-  SELECT e.subject_id, e.t0,
+  -- t0 must appear in GROUP BY because the ARRAY_AGG ORDER BY references it.
+  SELECT e.subject_id,
          ARRAY_AGG(a.hadm_id ORDER BY ABS(TIMESTAMP_DIFF(a.admittime, e.t0, DAY)) LIMIT 1)[OFFSET(0)] AS hadm_near
   FROM eligible e
   JOIN `physionet-data.mimiciv_3_1_hosp.admissions` a
     ON a.subject_id = e.subject_id
    AND ABS(TIMESTAMP_DIFF(a.admittime, e.t0, DAY)) <= 365
-  GROUP BY 1, 2
+  GROUP BY e.subject_id, e.t0
 ),
 charl AS (
   SELECT hadm_id, charlson_comorbidity_index,
@@ -156,7 +159,7 @@ labs AS (
    AND l.itemid IN (50912, 50971)
    AND l.valuenum IS NOT NULL
    AND ABS(TIMESTAMP_DIFF(l.charttime, e.t0, DAY)) <= 365
-  GROUP BY 1
+  GROUP BY e.subject_id, e.t0
 ),
 afib AS (
   SELECT e.subject_id, MAX(1) AS has_af
@@ -292,7 +295,8 @@ LEFT JOIN adm_near    an USING (subject_id)
 LEFT JOIN charl       c  ON c.hadm_id = an.hadm_near
 LEFT JOIN labs        l  USING (subject_id)
 LEFT JOIN afib        af USING (subject_id)
-LEFT JOIN race        rc USING (subject_id);
+LEFT JOIN race        rc USING (subject_id)
+);
 
 
 -- ============================================================
