@@ -58,7 +58,7 @@ paired AS (
          MAX(IF(g.echo_dt = p.t0, g.echo_id,   NULL)) AS echo_id_t0,
          MAX(IF(g.echo_dt = p.t0, g.mac_grade, NULL)) AS mac_baseline,
          MAX(IF(g.echo_dt = p.t1, g.mac_grade, NULL)) AS mac_followup
-  FROM pairs p JOIN graded g USING (subject_id)
+  FROM pairs p JOIN graded g ON g.subject_id = p.subject_id
   GROUP BY 1, 2, 3, 4, 5
 ),
 
@@ -84,8 +84,8 @@ cohort AS (
          d.dod,
          IFNULL(x.ever_mv_prosth, 0) AS ever_mv_prosth
   FROM paired p
-  JOIN demog d USING (subject_id)
-  LEFT JOIN prosth x USING (subject_id)
+  JOIN demog d      ON d.subject_id = p.subject_id
+  LEFT JOIN prosth x ON x.subject_id = p.subject_id
 ),
 eligible AS (
   SELECT * FROM cohort
@@ -288,14 +288,17 @@ SELECT
   CAST(e.dod IS NOT NULL AND DATE_DIFF(DATE(e.dod), DATE(e.t1), DAY) BETWEEN 0 AND 365
        AS INT64) AS died_1yr_after_t1
 
+-- All joins use explicit ON. USING cannot be mixed after an ON join here: once
+-- echo_params is joined by ON, both e.subject_id and ep.subject_id are in scope and a
+-- later USING (subject_id) is ambiguous.
 FROM eligible e
-LEFT JOIN exposure    x  USING (subject_id)
+LEFT JOIN exposure    x  ON x.subject_id  = e.subject_id
 LEFT JOIN echo_params ep ON ep.subject_id = e.subject_id AND ep.echo_id = e.echo_id_t0
-LEFT JOIN adm_near    an USING (subject_id)
-LEFT JOIN charl       c  ON c.hadm_id = an.hadm_near
-LEFT JOIN labs        l  USING (subject_id)
-LEFT JOIN afib        af USING (subject_id)
-LEFT JOIN race        rc USING (subject_id)
+LEFT JOIN adm_near    an ON an.subject_id = e.subject_id
+LEFT JOIN charl       c  ON c.hadm_id     = an.hadm_near
+LEFT JOIN labs        l  ON l.subject_id  = e.subject_id
+LEFT JOIN afib        af ON af.subject_id = e.subject_id
+LEFT JOIN race        rc ON rc.subject_id = e.subject_id
 );
 
 
