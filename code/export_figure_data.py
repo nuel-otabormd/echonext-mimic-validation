@@ -115,6 +115,49 @@ dump("acquisition.csv", ["setting", "n", "prevalence", "auroc", "ci_low", "ci_hi
        f"{m['auroc_ci'][0]:.4f}", f"{m['auroc_ci'][1]:.4f}", f"{m['slope']:.3f}"]
       for k, m in acq.items()])
 
+# --------------------------------------------------------------------- Graphical abstract inputs
+# build_graphical_abstract.py states that every number it draws comes from the same results object
+# the tables are generated from, so that the abstract cannot drift from the paper. These two files
+# are what makes that true; without them the abstract would be the one artefact carrying transcribed
+# numbers.
+BENCH_KEY = {"Reduced LVEF (<=45%)": "lvef_lte_45", "LV wall thickness (>=1.3 cm)": "lvwt_gte_13",
+             "Aortic stenosis": "aortic_stenosis", "Aortic regurgitation": "aortic_regurg",
+             "Mitral regurgitation": "mitral_regurg", "Tricuspid regurgitation": "tricuspid_regurg",
+             "Pulmonic regurgitation": "pulm_regurg", "RV dysfunction": "rv_dysfunction",
+             "Pericardial effusion": "pericardial", "Elevated PASP (>=45 mmHg)": "pasp_gte_45",
+             "Elevated TR Vmax (>=3.2 m/s)": "tr_max_gte_32"}
+COMPOSITE = "Structural heart disease"
+_lab, _bench = A["labels"], A["benchmark"]
+_comp = [k for k in _lab if k != COMPOSITE]
+
+dump("ga_both_settings.csv", ["setting", "label", "prev_pct", "mean_pred"],
+     [row for k in _comp for row in (
+         ["MIMIC-IV", k, f"{100 * _lab[k]['prev']:.4f}", f"{_lab[k]['mean_pred']:.4f}"],
+         ["Benchmark", k, f"{100 * _bench[BENCH_KEY[k]]['prev']:.4f}",
+          f"{_bench[BENCH_KEY[k]]['mean_pred']:.4f}"])])
+
+# n_corrected counts the components the prior shift leaves with POSITIVE Brier skill, that is, more
+# accurate than assigning the observed prevalence to everyone. That is the claim the abstract makes
+# ("correct component probabilities before reading them as risk"), and it is a stricter test than
+# calibration-in-the-large alone: pericardial effusion is the one component it does not reach.
+ga = {
+    "n": A["meta"]["n"],
+    "prev_pct": round(100 * _lab[COMPOSITE]["prev"], 1),
+    "auroc_mimic": round(_lab[COMPOSITE]["auroc"], 2),
+    "auroc_bench": round(_bench["shd"]["auroc"], 2),
+    "gap": round(_bench["shd"]["auroc"] - _lab[COMPOSITE]["auroc"], 3),
+    "comp_auroc_lo": round(min(_lab[k]["auroc"] for k in _comp), 3),
+    "comp_auroc_hi": round(max(_lab[k]["auroc"] for k in _comp), 3),
+    "n_overpredict_mimic": sum(1 for k in _comp if _lab[k]["cil"] < 0),
+    "n_overpredict_bench": sum(1 for k in _comp if _bench[BENCH_KEY[k]]["cil"] < 0),
+    "n_corrected": sum(1 for k in _comp if _lab[k]["prior_shift"]["bss"] > 0),
+    "n_components": len(_comp),
+}
+with open(os.path.join(OUT, "ga_summary.json"), "w") as f:
+    json.dump(ga, f, indent=1)
+    f.write("\n")
+print(f"  {'ga_summary.json':24s} {len(ga):6,} values")
+
 # ----------------------------------------------------------------- Figure 1: cohort flow counts
 # NOT written here. The flow diagram needs counts from stages that exist only upstream of the
 # predictions (source dataset totals, echocardiographic exclusions, ECGs excluded before the cohort

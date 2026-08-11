@@ -1,8 +1,13 @@
 """Graphical abstract.
 
-Every number is read from results/figure_data/ga_summary.json and ga_both_settings.csv, which are
-emitted from the same results object the tables are generated from, so the abstract cannot drift
-from the paper.
+Every number is read from results/figure_data/ga_summary.json and ga_both_settings.csv, which
+code/export_figure_data.py emits from the same results object the tables are generated from, so the
+abstract cannot drift from the paper.
+
+One value there needs its definition stated. n_corrected counts the components the prior shift
+leaves with positive Brier skill, that is, more accurate than assigning the observed prevalence to
+everyone. That is a stricter test than calibration-in-the-large alone, and it is what the footer
+below claims; pericardial effusion is the one component it does not reach.
 
 Output: results/figures/graphical_abstract.{png,pdf} at 18.0 x 11.0 cm, 600 dpi, sans serif,
 no text below 8 pt.
