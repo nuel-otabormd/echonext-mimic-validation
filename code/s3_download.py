@@ -4,8 +4,10 @@ from botocore.config import Config
 from concurrent.futures import ThreadPoolExecutor, as_completed
 AP="arn:aws:s3:us-east-1:724665945834:accesspoint/mimic-iv-ecg-v1-0-01"
 PREFIX="mimic-iv-ecg/1.0/"
-NEED=os.path.join(os.environ.get("ECHONEXT_DATA", os.path.expanduser("~/Desktop/RESEARCH")), "ecg_needed")
-CSV=os.path.join(os.environ.get("ECHONEXT_DATA", os.path.expanduser("~/Desktop/RESEARCH")), "cohort_oneperpt_full.csv")
+import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import paths
+NEED=paths.waveform_dir()
+CSV=paths.cohort_csv()
 MIN={".hea":50,".dat":1000}
 s3=boto3.client("s3", region_name="us-east-1",
                 config=Config(max_pool_connections=80, retries={'max_attempts':3,'mode':'standard'}))

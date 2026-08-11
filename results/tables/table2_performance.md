@@ -1,0 +1,18 @@
+**Table 2. Discrimination and calibration by label in MIMIC-IV (n = 45,878).**
+
+| Label | Prevalence, % | Mean predicted probability | AUROC (95% CI) | AUPRC | Normalized AUPRC | Calibration-in-the-large | Calibration slope | Brier | Brier skill |
+|---|---|---|---|---|---|---|---|---|---|
+| Reduced LVEF (<=45%) | 16.0 | 0.399 | 0.835 (0.830–0.839) | 0.512 | 0.419 | -0.238 | 1.15 | 0.175 | -0.301 |
+| LV wall thickness (>=1.3 cm) | 22.4 | 0.419 | 0.679 (0.673–0.684) | 0.349 | 0.162 | -0.195 | 0.79 | 0.207 | -0.191 |
+| Aortic stenosis | 5.1 | 0.404 | 0.783 (0.775–0.792) | 0.144 | 0.098 | -0.354 | 0.94 | 0.215 | -3.464 |
+| Aortic regurgitation | 1.5 | 0.372 | 0.730 (0.713–0.746) | 0.039 | 0.024 | -0.357 | 0.83 | 0.191 | -11.595 |
+| Mitral regurgitation | 8.8 | 0.374 | 0.806 (0.799–0.812) | 0.286 | 0.217 | -0.286 | 1.05 | 0.180 | -1.239 |
+| Tricuspid regurgitation | 10.3 | 0.379 | 0.805 (0.799–0.812) | 0.330 | 0.253 | -0.276 | 1.09 | 0.171 | -0.852 |
+| Pulmonic regurgitation | 1.6 | 0.280 | 0.723 (0.703–0.743) | 0.051 | 0.036 | -0.264 | 0.56 | 0.137 | -7.870 |
+| RV dysfunction | 5.8 | 0.356 | 0.837 (0.829–0.844) | 0.282 | 0.238 | -0.298 | 1.11 | 0.168 | -2.076 |
+| Pericardial effusion | 0.6 | 0.388 | 0.765 (0.739–0.792) | 0.019 | 0.013 | -0.382 | 1.36 | 0.175 | -28.960 |
+| Elevated PASP (>=45 mmHg) | 10.8 | 0.402 | 0.768 (0.762–0.774) | 0.270 | 0.182 | -0.294 | 1.09 | 0.188 | -0.961 |
+| Elevated TR Vmax (>=3.2 m/s) | 12.7 | 0.391 | 0.763 (0.757–0.769) | 0.301 | 0.200 | -0.264 | 1.04 | 0.183 | -0.646 |
+| Structural heart disease | 47.2 | 0.444 | 0.790 (0.786–0.794) | 0.772 | 0.568 | +0.028 | 0.93 | 0.187 | +0.249 |
+
+Calibration-in-the-large is observed prevalence minus mean predicted probability, on the probability scale; mean predicted probability is shown explicitly so the two cannot be confused. Normalized AUPRC is (AUPRC - prevalence)/(1 - prevalence). Brier skill score is 1 - Brier/[p(1-p)]; negative values indicate performance worse than assigning the observed prevalence to every patient. Confidence intervals are percentile bootstrap, 2,000 resamples, seed 0, with identical resample indices reused across labels.

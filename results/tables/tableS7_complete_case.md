@@ -1,0 +1,17 @@
+**Supplementary Table S7. Complete-case sensitivity analysis: performance restricted to studies in which the relevant structured field was populated.**
+
+| Label | Source field populated, % | Prevalence all records, % | AUROC all records | n complete-case | Prevalence complete-case, % | AUROC complete-case | Difference |
+|---|---|---|---|---|---|---|---|
+| Reduced LVEF (<=45%) | 100.0 | 16.03 | 0.835 | 45,878 | 16.03 | 0.835 | +0.000 |
+| LV wall thickness (>=1.3 cm) | 94.9 | 22.36 | 0.679 | 43,528 | 23.57 | 0.686 | +0.007 |
+| Aortic stenosis | 92.5 | 5.07 | 0.783 | 42,441 | 5.48 | 0.782 | -0.001 |
+| Aortic regurgitation | 32.7 | 1.54 | 0.730 | 15,009 | 4.70 | 0.634 | -0.096 |
+| Mitral regurgitation | 92.5 | 8.83 | 0.806 | 42,455 | 9.54 | 0.806 | -0.000 |
+| Tricuspid regurgitation | 93.2 | 10.32 | 0.805 | 42,754 | 11.07 | 0.808 | +0.003 |
+| Pulmonic regurgitation | 66.5 | 1.57 | 0.723 | 30,490 | 2.36 | 0.740 | +0.016 |
+| RV dysfunction | 97.4 | 5.78 | 0.837 | 44,665 | 5.94 | 0.839 | +0.002 |
+| Pericardial effusion | 18.0 | 0.59 | 0.765 | 8,246 | 3.27 | 0.680 | -0.086 |
+| Elevated PASP (>=45 mmHg) | 75.3 | 10.76 | 0.768 | 34,541 | 14.29 | 0.760 | -0.008 |
+| Elevated TR Vmax (>=3.2 m/s) | 75.3 | 12.70 | 0.763 | 34,542 | 16.87 | 0.757 | -0.006 |
+
+Neither estimate is unbiased. The all-records estimate is optimistic because studies with an absent field are treated as negative and are systematically lower-scoring. The complete-case estimate is pessimistic because fields are populated by indication, so the retained negatives are enriched for lesser degrees of the same pathology. The two should be read as bounds. Labels with near-complete ascertainment show no material difference.

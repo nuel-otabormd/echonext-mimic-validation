@@ -1,0 +1,20 @@
+Component,Item,Maximum absolute difference,Mean predicted probability
+Tabular feature,Sex,0.000e+00,-
+Tabular feature,Age,0.000e+00,-
+Tabular feature,Ventricular rate,0.000e+00,-
+Tabular feature,Atrial rate,0.000e+00,-
+Tabular feature,PR interval,0.000e+00,-
+Tabular feature,QRS duration,0.000e+00,-
+Tabular feature,Corrected QT,0.000e+00,-
+Model output,Reduced LVEF (<=45%),0.000e+00,0.5104
+Model output,LV wall thickness (>=1.3 cm),0.000e+00,0.4787
+Model output,Aortic stenosis,0.000e+00,0.4333
+Model output,Aortic regurgitation,0.000e+00,0.4421
+Model output,Mitral regurgitation,0.000e+00,0.4716
+Model output,Tricuspid regurgitation,0.000e+00,0.4803
+Model output,Pulmonic regurgitation,0.000e+00,0.3873
+Model output,RV dysfunction,0.000e+00,0.4804
+Model output,Pericardial effusion,0.000e+00,0.4588
+Model output,Elevated PASP (>=45 mmHg),0.000e+00,0.4786
+Model output,Elevated TR Vmax (>=3.2 m/s),0.000e+00,0.4703
+Model output,Structural heart disease,0.000e+00,0.5434

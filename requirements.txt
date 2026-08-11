@@ -1,10 +1,15 @@
-torch>=2.0
+# Analysis pipeline
+numpy>=1.21,<2
+scipy>=1.7
+pandas>=1.3
+scikit-learn>=1.0
+torch>=1.12
 wfdb>=4.0
-numpy>=1.24
-pandas>=2.0
-scikit-learn==1.1.3   # match EchoNext tabular_transformer.joblib pickle version
-scipy>=1.10
-matplotlib>=3.7
-joblib>=1.3
-boto3>=1.30           # S3 waveform download
-pyarrow>=12
+
+# Required only by code/equivalence_test.py, which compares against the official Lightning module.
+# Every other script runs without it.
+pytorch_lightning>=1.9
+
+# Scaler and imputer constants are read from code/tabular_transform_params.json rather than by
+# unpickling the released joblib, so no specific scikit-learn version is required. The released
+# joblib was created with scikit-learn 1.1.3 and cannot be applied on 1.2 or later.

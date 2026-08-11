@@ -1,0 +1,21 @@
+Analysis,"Prevalence, %",AUROC,CIL,Calibration slope,Brier skill
+RV dysfunction: categorical only (PRIMARY),5.78,0.837,-0.298,1.11,-2.076
+RV dysfunction: categorical + TAPSE,6.03,0.832,-0.295,1.09,-1.959
+TR Vmax: direct velocity (PRIMARY),12.70,0.763,-0.264,1.04,-0.646
+TR Vmax: derived gradient,11.39,0.766,-0.277,1.05,-0.816
+Aortic stenosis: rebuilt (PRIMARY),5.07,0.783,-0.354,0.94,-3.464
+Aortic stenosis: graded severity field only,4.46,0.781,-0.360,0.93,-4.078
+"LVWT: max(septal, inferolateral) (PRIMARY)",22.36,0.679,-0.195,0.79,-0.191
+LVWT: septal >=1.5 cm,4.00,0.746,-0.379,1.22,-4.336
+LVWT: categorical moderate-or-severe,3.24,0.754,-0.387,1.28,-5.562
+PASP: TR gradient + IVC RAP (PRIMARY),10.76,0.768,-0.294,1.09,-0.961
+PASP: phtn_severity moderate-or-severe,16.18,0.764,-0.240,1.07,-0.358
+Composite: rebuilt AS (PRIMARY),47.21,0.790,+0.028,0.93,+0.249
+Composite: graded severity field only,47.06,0.790,+0.026,0.93,+0.249
+ECG-to-echocardiogram window <=30d,48.72,0.789,+0.026,0.93,+0.247
+ECG-to-echocardiogram window <=90d,47.54,0.791,+0.023,0.94,+0.252
+ECG-to-echocardiogram window <=180d,47.18,0.792,+0.024,0.94,+0.252
+ECG-to-echocardiogram window <=365d,47.21,0.790,+0.028,0.93,+0.249
+RV dysfunction excluding unassessable studies,5.93,0.839,-0.295,1.12,-1.980
+"Atrial rate filled with zero, as released (PRIMARY)",47.21,0.790,+0.028,0.93,+0.249
+Atrial rate median-imputed,47.21,0.790,+0.014,0.93,+0.251

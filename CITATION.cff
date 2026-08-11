@@ -5,20 +5,14 @@ type: software
 authors:
   - family-names: Otabor
     given-names: Emmanuel
-version: 1.0.0
-date-released: 2026-06-27
+version: 2.0.0
 license: MIT
-repository-code: "https://github.com/nuel-otabormd/echonext-mimic-validation"
-doi: 10.5281/zenodo.20962995
-identifiers:
-  - type: doi
-    value: 10.5281/zenodo.20962995
-    description: "Zenodo archive of the v1.0.0 release"
 abstract: >-
-  Independent external validation, recalibration, and fairness audit of the publicly
-  released EchoNext-Mini ECG model for echocardiogram-confirmed structural heart disease,
-  applied frozen to MIMIC-IV (n=45,878 patients, one most-recent ECG per patient). Includes BigQuery label/cohort definitions,
-  a WFDB-to-model inference adapter, and the full analysis pipeline.
+  Independent external validation, recalibration and prioritisation analysis of the publicly
+  released EchoNext-Mini electrocardiographic model for structural heart disease, applied frozen to
+  MIMIC-IV and to the released EchoNext-Mini benchmark test set. Includes BigQuery label and cohort
+  definitions, a Waveform Database to model inference adapter, an implementation equivalence test
+  against the released module, and the full analysis pipeline.
 keywords:
   - electrocardiography
   - structural heart disease

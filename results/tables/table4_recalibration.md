@@ -1,0 +1,18 @@
+**Table 4. Effect of two recalibration strategies in MIMIC-IV.**
+
+| Label | Prevalence, % | CIL, as released | Slope, as released | Brier skill, as released | CIL, prior shift | Slope, prior shift | Brier skill, prior shift | CIL, local Platt | Slope, local Platt | Brier skill, local Platt |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Reduced LVEF (<=45%) | 16.0 | -0.238 | 1.15 | -0.301 | -0.056 | 1.15 | +0.202 | -0.000 | 1.00 | +0.235 |
+| LV wall thickness (>=1.3 cm) | 22.4 | -0.195 | 0.79 | -0.191 | +0.013 | 0.79 | +0.063 | +0.000 | 1.00 | +0.066 |
+| Aortic stenosis | 5.1 | -0.354 | 0.94 | -3.464 | +0.005 | 0.94 | +0.054 | -0.000 | 1.00 | +0.054 |
+| Aortic regurgitation | 1.5 | -0.357 | 0.83 | -11.595 | +0.005 | 0.87 | +0.009 | +0.000 | 0.95 | +0.011 |
+| Mitral regurgitation | 8.8 | -0.286 | 1.05 | -1.239 | +0.009 | 1.05 | +0.117 | -0.000 | 1.00 | +0.120 |
+| Tricuspid regurgitation | 10.3 | -0.276 | 1.09 | -0.852 | +0.008 | 1.10 | +0.138 | -0.000 | 1.00 | +0.141 |
+| Pulmonic regurgitation | 1.6 | -0.264 | 0.56 | -7.870 | +0.010 | 0.56 | +0.008 | +0.000 | 0.99 | +0.015 |
+| RV dysfunction | 5.8 | -0.298 | 1.11 | -2.076 | -0.055 | 1.11 | +0.038 | +0.000 | 1.00 | +0.135 |
+| Pericardial effusion | 0.6 | -0.382 | 1.36 | -28.960 | -0.016 | 1.30 | -0.059 | -0.000 | 0.97 | +0.006 |
+| Elevated PASP (>=45 mmHg) | 10.8 | -0.294 | 1.09 | -0.961 | -0.057 | 1.09 | +0.052 | +0.000 | 1.00 | +0.095 |
+| Elevated TR Vmax (>=3.2 m/s) | 12.7 | -0.264 | 1.04 | -0.646 | +0.036 | 1.04 | +0.084 | -0.000 | 1.00 | +0.103 |
+| Structural heart disease | 47.2 | +0.028 | 0.93 | +0.249 | +0.011 | 0.93 | +0.252 | +0.000 | 1.00 | +0.253 |
+
+The prior shift is logit(p) + logit(pi_train) using only the released training-split prevalences and no local outcome data. Local Platt scaling is five-fold out-of-fold and requires local labels. Calibration slopes are essentially unchanged by the prior shift, since it is an intercept correction by construction.

@@ -1,119 +1,143 @@
-# External Validation of EchoNext-Mini in MIMIC-IV
+# External validation of EchoNext-Mini in MIMIC-IV
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20962995.svg)](https://doi.org/10.5281/zenodo.20962995)
+Independent external validation, recalibration and prioritisation analysis of the publicly released
+**EchoNext-Mini** ECG model for echocardiographically defined structural heart disease (SHD), applied
+frozen to **MIMIC-IV** (45,878 patients, one electrocardiogram per patient) and to the **released
+EchoNext-Mini benchmark test set** (5,442 electrocardiograms).
 
-Independent external validation, recalibration, and fairness audit of the publicly released
-**EchoNext-Mini** ECG→structural-heart-disease (SHD) model on **MIMIC-IV** (n = 45,878 patients,
-one most-recent ECG per patient).
+The released model is applied in two settings for two purposes: to its own benchmark, to verify this
+implementation against published performance, and to MIMIC-IV, to assess transportability. Composite
+discrimination was 0.820 on the benchmark and 0.790 in MIMIC-IV. Composite calibration was preserved
+in both settings, whereas the eleven component probabilities were not on the natural-prevalence scale
+in either, indicating a property of the released model rather than of the external dataset. A
+closed-form prior shift using only the published training prevalences, and requiring no local outcome
+data, restored component calibration.
 
-> A publicly released AI-ECG model showed moderate-to-good transportability in MIMIC-IV: preserved
-> discrimination for the composite SHD label and a near-calibrated composite output, while
-> component-level probabilities over-predicted and required local recalibration. Performance showed
-> no large differences across sex or reported race/ethnicity. LV-hypertrophy detection is the
-> principal limitation.
+## Contents
 
-**Composite SHD AUROC 0.790 (95% CI 0.786–0.794)** vs 0.820 internal; composite calibration slope
-0.94 → 1.00 after five-fold out-of-fold Platt recalibration. Pipeline reproduces the official
-EchoNext Lightning module to 1.19×10⁻⁷.
-
-## What's here
 ```
-sql/    01_echo_labels.sql        12 SHD labels from MIMIC-IV-ECHO structured fields
-        02_analytic_cohort.sql    deterministic ECG-centric one-per-patient cohort
-        03_care_setting.sql       care setting at ECG (encounter linkage)
-        04_export_for_analysis.sql BigQuery cohort + race -> the local CSVs the scripts read
-        05_missingness.sql        per-label structured-field availability (Supp Table S3)
-        06_lvh_secondary.sql      LV-hypertrophy at higher grades, locked cohort (Supp Table S2)
-code/   run_inference.py          WFDB -> released-model adapter + inference
-        s3_download.py            parallel S3 download of paired waveforms
-        smoke_test.py             25-ECG end-to-end pipeline check vs official module
-        analyze.py                discrimination (boot CI), calibration, composite recalibration, fairness
-        recalibration_per_label.py  per-label OOF-Platt recalibration (Supp Table S4)
-        lvh_secondary.py          LVH discrimination at higher grades, locked cohort (Supp Table S2)
-        sensitivity.py, atrial_sens.py, calib_robust.py   sensitivity + calibration robustness (Supp Table S2)
-        supplement_s2.py          Supp Table S2 (sensitivity with Brier/slope/CIL)
-        echonext_mini_table1.py   EchoNext-Mini cohort column for the Table 1 comparison
-        fig1_cohort.R             Figure 1 cohort flow (Graphviz/DiagrammeR)
-        fig2_calibration.py + .R  Figure 2 calibration A/B (export + ggplot2)
-        fig3_roc.py + .R          Figure 3 ROC (export + ggplot2)
-        figures.py                optional supplementary plots (forest, subgroup)
-docs/   DECISIONS_AND_RATIONALE.md   every label/method choice + the alternative tested
-        supplement_label_definitions.md  Table S1 (label harmonization + cohort prevalence comparison)
-        supplement_table_S2.md / S3_missingness.md / S4_recalibration.md
-        TRIPOD_AI_checklist.md, PAPER2_HANDOFF.md
-results/ RESULTS_SUMMARY.md, PAPER1_RESULTS.md, *.json metrics, figures/ (PDF+PNG)
+sql/     01_echo_labels.sql          twelve SHD labels from MIMIC-IV-ECHO structured fields
+         02_analytic_cohort.sql      deterministic one-electrocardiogram-per-patient cohort
+         03_care_setting.sql         care setting at the time of the electrocardiogram
+         04_export_for_analysis.sql  the two local CSVs the Python scripts read
+
+code/    paths.py                    all filesystem locations, from environment variables
+         s3_download.py              retrieve the paired waveforms from PhysioNet
+         equivalence_test.py         verify this implementation against the released module
+         run_inference.py            frozen-model inference over the MIMIC-IV cohort
+         run_benchmark.py            frozen-model inference over the released benchmark test set
+         analyze.py                  discrimination, calibration, recalibration, subgroups
+         triage_analysis.py          decision curve and capacity-constrained prioritisation
+         make_tables.py              every manuscript and supplementary table
+         tabular_transform_params.json   scaler and imputer constants, extracted from the release
+
+results/ analysis.json               all primary and subgroup results
+         triage.json                 decision-curve and prioritisation results
+         benchmark_metrics.json      benchmark test-set results
+         tables/                     generated tables, Markdown and CSV
+
+docs/    METHODS.md                  the pipeline, step by step
+         DECISIONS.md                every label and method choice, with its rationale
+         REPRODUCE.md                exact commands, in order
+         TRIPOD_AI_checklist.md
 ```
-**No patient-level data is included** (MIMIC-IV and EchoNext-Mini are credentialed). Only code, SQL,
-and aggregate results. The two local CSVs the scripts read (`cohort_oneperpt_full.csv`,
-`subject_race.csv`) and the EchoNext-Mini metadata are generated by the replicator (steps below).
+
+**No patient-level data is included.** MIMIC-IV and the EchoNext release are credentialed resources
+governed by data use agreements that prohibit redistribution. Only code, SQL, and aggregate results
+are published here. The two local CSVs the scripts read are generated by the replicator from
+BigQuery, as described below.
 
 ## Prerequisites
-- **Credentialed access** (PhysioNet): MIMIC-IV, MIMIC-IV-ECG, MIMIC-IV-ECHO, and the EchoNext-Mini release.
-- **Google BigQuery** with the MIMIC-IV datasets (`physionet-data.*`); set your own billing project (the SQL uses a `your-gcp-project` placeholder).
-- **EchoNext-Mini model weights:** github.com/PierreElias/IntroECG → `7-EchoNext Minimodel` (weights.pt, waveform_normalization_params.json, tabular_transformer.joblib).
-- **Python 3.9+** — `pip install -r requirements.txt` (scikit-learn pinned to 1.1.3 to match the released joblib).
-- **R 4.x** for the figures — `install.packages(c("DiagrammeR","DiagrammeRsvg","rsvg","ggplot2","patchwork"))`.
+
+- **Credentialed PhysioNet access** to MIMIC-IV, MIMIC-IV-ECG, MIMIC-IV-ED, MIMIC-IV-ECHO, and the
+  EchoNext release.
+- **Google BigQuery** access to the `physionet-data` datasets, with your own billing project.
+- **EchoNext-Mini model weights**, from the developers' repository: the model directory containing
+  `weights.pt` and `waveform_normalization_params.json`, and the accompanying `cradlenet` package.
+- **Python 3.9 or later** (`pip install -r requirements.txt`).
+- **R 4.x** for the figures.
+
+## Setup
+
+All filesystem locations come from environment variables, so that no machine-specific path appears
+in this repository. Set these once per session:
+
+```bash
+export ECHONEXT_WORK=/path/to/working/directory
+export ECHONEXT_MODEL=/path/to/echonext_multilabel_minimodel
+export ECHONEXT_BENCHMARK=/path/to/echonext/1.1.1
+export ECHONEXT_CRADLENET=/path/to/directory/containing/cradlenet   # optional; inferred if unset
+```
+
+Lay out the working directory as:
+
+```
+$ECHONEXT_WORK/
+    cohort_oneperpt_full.csv     exported in step 2 below
+    subject_race.csv             exported in step 2 below
+    waveforms/                   MIMIC-IV-ECG records, mirroring the PhysioNet directory layout
+    predictions/                 created by the inference steps
+```
+
+**None of these directories may sit inside a cloud-synchronised folder.** Credentialed data must not
+be uploaded to a third-party service, and synchronisation daemons can also make large sequential
+reads substantially slower.
 
 ## Reproduce
-```bash
-# 0a. Point the SQL at YOUR BigQuery project (replace the placeholder everywhere)
-sed -i 's/your-gcp-project/YOUR_PROJECT/g' sql/*.sql      # macOS: sed -i '' 's/.../.../g'
-# 0b. Tell the scripts where your data/working dir is (all paths derive from this one var)
-export ECHONEXT_DATA=/path/to/work     # default if unset: ~/Desktop/RESEARCH
 
-# 1. Build labels, cohort, care setting (BigQuery)
+See `docs/REPRODUCE.md` for the full sequence with expected runtimes. In brief:
+
+```bash
+# 1. Point the SQL at your BigQuery project, then build labels, cohort and care setting
+sed -i '' 's/your-gcp-project/YOUR_PROJECT/g' sql/*.sql     # GNU sed: drop the ''
 bq query --use_legacy_sql=false < sql/01_echo_labels.sql
 bq query --use_legacy_sql=false < sql/02_analytic_cohort.sql
-bq query --use_legacy_sql=false < sql/03_care_setting.sql        # prints the Table 1 care-setting split
+bq query --use_legacy_sql=false < sql/03_care_setting.sql
 
-# 2. Export the cohort + race lookup to the two CSVs the Python scripts read. Run query (A) and
-#    query (B) in sql/04_export_for_analysis.sql SEPARATELY and save each (BigQuery console:
-#    paste query -> Save Results -> CSV; or bq query --format=csv > file.csv):
-#      query (A)  ->  cohort_oneperpt_full.csv
-#      query (B)  ->  subject_race.csv
+# 2. Export the two CSVs (run queries A and B in sql/04 separately)
 
-# 3. Download the paired ECG waveforms (S3, credentialed) and verify integrity
-python code/s3_download.py        # ~13 GB; every .dat must be exactly 120000 bytes
-# (optional) end-to-end check vs the official EchoNext module on a 25-ECG subset:
-#   head -26 cohort_oneperpt_full.csv > smoke25.csv   # then set its path in smoke_test.py
+# 3. Retrieve the paired waveforms
+python code/s3_download.py
 
-# 4. Inference with the frozen released model
-python code/run_inference.py --cohort cohort_oneperpt_full.csv --source needed --out_dir results_full
+# 4. Verify this implementation reproduces the released module exactly
+python code/equivalence_test.py
 
-# 5. Analysis, recalibration, sensitivity (writes results_full/*.json + Supp tables S2/S4)
+# 5. Inference: MIMIC-IV cohort, then the released benchmark test set
+python code/run_inference.py --threads 2
+python code/run_benchmark.py
+
+# 6. Analysis and tables
 python code/analyze.py
-python code/recalibration_per_label.py
-python code/sensitivity.py ; python code/atrial_sens.py ; python code/calib_robust.py ; python code/supplement_s2.py
-bq query --use_legacy_sql=false < sql/05_missingness.sql        # Supp Table S3
-bq query --use_legacy_sql=false < sql/06_lvh_secondary.sql      # save -> lvh_secondary.csv, then:
-python code/lvh_secondary.py                                    # Supp Table S2 (secondary LVH)
+python code/triage_analysis.py
+python code/make_tables.py
+```
 
-# 6. Figures (R)
-python code/fig2_calibration.py && Rscript code/fig2_calibration.R   # Figure 2
-python code/fig3_roc.py        && Rscript code/fig3_roc.R            # Figure 3
-Rscript code/fig1_cohort.R                                          # Figure 1
+Every result in the manuscript is produced by steps 5 and 6 and written to `results/`. No number is
+transcribed by hand.
 
-# 7. (optional) Table 1 EchoNext-Mini comparison column, from the credentialed metadata
-python code/echonext_mini_table1.py /path/to/echonext_metadata_100k.csv
-```
-**Data layout.** All scripts resolve paths from the single `ECHONEXT_DATA` environment variable
-(default `~/Desktop/RESEARCH`) — no per-script path edits needed. Lay out `$ECHONEXT_DATA` as:
-```
-$ECHONEXT_DATA/
-  cohort_oneperpt_full.csv, subject_race.csv, sensitivity.csv   # exported in step 2
-  ecg_needed/                              # ECG waveforms (step 3)
-  EchoNext-repo/
-    results_full/                          # probs.npy, kept_paths.txt, figs/  (inference + figure data)
-    7-EchoNext Minimodel/                  # released model weights (from GitHub)
-  echonext-mimic-validation/               # this repo (R/py figures write to its results/figures/)
-```
-Determinism: the cohort SQL uses explicit tie-breakers and all bootstrap/CV steps use fixed seeds, so
-re-runs are bit-reproducible.
+### A note on `--threads`
+
+`run_inference.py` defaults to two CPU threads. This is deliberate. Setting the thread count to the
+core count over-subscribes a busy machine and causes severe context-switch contention: on a
+ten-core machine under load, nine threads ran roughly forty times slower than two, while the process
+reported near-zero CPU. The failure presents as a hang rather than as a slowdown. Increase
+`--threads` only on an otherwise idle machine.
+
+## Determinism
+
+Cohort construction uses explicit tie-breakers throughout, including the assignment of race and
+ethnicity. Bootstrap resampling and cross-validation use fixed seeds. Inference reads the scaler and
+imputer constants from `code/tabular_transform_params.json` rather than unpickling the released
+joblib, so results do not depend on the installed scikit-learn version. Re-runs reproduce the
+published values exactly.
 
 ## Citation
-Cite the EchoNext-Mini paper (Hughes et al., NEJM AI 2026, DOI 10.1056/AIdbp2500516), the EchoNext model
-(Poterucha et al., Nature 2025, DOI 10.1038/s41586-025-09227-0), MIMIC-IV / MIMIC-IV-ECG / MIMIC-IV-ECHO
-(PhysioNet), and this repository (Zenodo DOI: 10.5281/zenodo.20962995). See `CITATION.cff`.
 
-## License
-Code: MIT (see `LICENSE`). Data are governed by the PhysioNet Credentialed Health Data License — not redistributed here.
+Cite the EchoNext-Mini model and dataset (Hughes et al., NEJM AI 2026, doi:10.1056/AIdbp2500516), the
+EchoNext model (Poterucha et al., Nature 2025, doi:10.1038/s41586-025-09227-0), MIMIC-IV and its
+matched subsets via PhysioNet, and this repository. See `CITATION.cff`.
+
+## Licence
+
+Code is released under the MIT Licence (see `LICENSE`). Data are governed by the PhysioNet
+Credentialed Health Data Licence and are not redistributed here.

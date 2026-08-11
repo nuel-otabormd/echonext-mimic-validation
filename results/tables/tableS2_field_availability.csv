@@ -1,0 +1,12 @@
+Label,MIMIC-IV-ECHO source field,"Field populated, n (%)","Field absent, treated as negative, n (%)","Prevalence under this convention, %"
+Reduced LVEF (<=45%),lvef / biplane_lvef / lvef_3d,"45,878 (100.0)",0 (0.0),16.03
+LV wall thickness (>=1.3 cm),"ivs_thickness, inferolateral_thickness","43,528 (94.9)","2,350 (5.1)",22.36
+Aortic stenosis,"aortic valve severity; av_pk_vel, av_mean_grad, av_area","42,441 (92.5)","3,437 (7.5)",5.07
+Aortic regurgitation,aortic regurgitation severity,"15,009 (32.7)","30,869 (67.3)",1.54
+Mitral regurgitation,mitral regurgitation severity,"42,455 (92.5)","3,423 (7.5)",8.83
+Tricuspid regurgitation,tricuspid regurgitation severity,"42,754 (93.2)","3,124 (6.8)",10.32
+Pulmonic regurgitation,pulmonic regurgitation severity,"30,490 (66.5)","15,388 (33.5)",1.57
+RV dysfunction,RV systolic function descriptor,"44,665 (97.4)","1,213 (2.6)",5.78
+Pericardial effusion,pericardial effusion size,"8,246 (18.0)","37,632 (82.0)",0.59
+Elevated PASP (>=45 mmHg),TR gradient + IVC-estimated RAP,"34,541 (75.3)","11,337 (24.7)",10.76
+Elevated TR Vmax (>=3.2 m/s),TR peak velocity,"34,542 (75.3)","11,336 (24.7)",12.70
