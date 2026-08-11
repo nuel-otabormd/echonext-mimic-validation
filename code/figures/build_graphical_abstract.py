@@ -75,9 +75,16 @@ def medallion(cx, cy, rad, fc, glyph):
 fig.patches.append(FancyBboxPatch((0.035, 0.885), 0.93, 0.088,
                    boxstyle="round,pad=0,rounding_size=0.030", transform=T,
                    facecolor="white", edgecolor=NAVY, linewidth=1.2, zorder=3))
-fig.text(0.5, 0.929, "Component outputs are ranking scores, not risks, in the model's own "
-         "benchmark as well as in MIMIC-IV",
-         ha="center", va="center", fontsize=9.4, fontweight="bold", color=NAVY, zorder=4)
+# "not absolute risks", not "not risks": the outputs are probabilities in the mathematical sense,
+# and the claim is that they do not estimate absolute event probability without correction. This is
+# the manuscript's own wording, in the abstract and the conclusion, so the two cannot be read as
+# making different claims.
+# 9.0 pt, not 9.4: "absolute" lengthens the line past the box, and "and in MIMIC-IV" rather than
+# "as well as in MIMIC-IV" buys back enough width to keep the type nearly full size. Measured
+# clearance is 0.32 cm each side; at 9.4 pt the full wording overhangs by 0.48 cm.
+fig.text(0.5, 0.929, "Component outputs are ranking scores, not absolute risks, in the model's own "
+         "benchmark and in MIMIC-IV",
+         ha="center", va="center", fontsize=9.0, fontweight="bold", color=NAVY, zorder=4)
 fig.text(0.5, 0.853, f"External validation and recalibration of EchoNext-Mini in MIMIC-IV  ·  "
          f"{S['n']:,} patients",
          ha="center", va="center", fontsize=8, color=GREY, style="italic")
