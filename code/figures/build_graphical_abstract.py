@@ -147,16 +147,21 @@ ax3.plot([3.4], [0.545], marker="o", ms=5.4, mfc=CRIM, mec="white", mew=0.7, cli
 ax3.text(4.3, 0.545, "MIMIC-IV", fontsize=8, color=CRIM, va="center", clip_on=False)
 fig.text(0.798, 0.322, f"All {S['n_components']} components over-predicted risk in\nboth settings, "
          f"a property of the model", ha="center", va="center", fontsize=8, color=INK, linespacing=1.5)
-fig.text(0.798, 0.222, f"Predictions cluster near {min(med_b, med_m):.2f} to {max(med_b, med_m):.2f}"
-         f"\nwhatever the prevalence", ha="center", va="center", fontsize=8, color=CRIM,
-         fontweight="bold", linespacing=1.45)
+# A stated fraction is checkable where "cluster near" is not: exactly 11 of the 22 component
+# points, across both settings, fall between 0.35 and 0.40.
+inband = int(((both.mean_pred >= 0.35) & (both.mean_pred <= 0.40)).sum())
+frac = "Half" if inband * 2 == len(both) else f"{inband} of {len(both)}"
+fig.text(0.798, 0.222, f"{frac} of all components predict\n0.35 to 0.40 whatever the prevalence",
+         ha="center", va="center", fontsize=8, color=CRIM, fontweight="bold", linespacing=1.45)
 
 # ---- takeaway. States what a reader should DO; the mechanism sits on the second line.
 fig.patches.append(FancyBboxPatch((0.035, 0.038), 0.93, 0.098,
                    boxstyle="round,pad=0,rounding_size=0.030", transform=T,
                    facecolor=NAVY, edgecolor="none", zorder=3))
-fig.text(0.5, 0.104, "Rank on the composite as released; correct component probabilities before "
-         "reading them as risk", ha="center", va="center", color="white", fontsize=9,
+# The composite is near-calibrated (CIL +0.028, slope 0.93, Brier skill +0.249), so it may be
+# read as a probability, not only ranked on. Saying "rank" would discard that result.
+fig.text(0.5, 0.104, "Composite output may be used as released; correct component probabilities "
+         "before reading them as risk", ha="center", va="center", color="white", fontsize=9,
          fontweight="bold", zorder=4)
 fig.text(0.5, 0.065, f"A shift from the published training prevalences does this without local "
          f"outcome data, for {S['n_corrected']} of {S['n_components']} components",
