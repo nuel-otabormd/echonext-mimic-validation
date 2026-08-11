@@ -1,0 +1,23 @@
+setting,label,prev_pct,mean_pred
+MIMIC-IV,Reduced LVEF (<=45%),16.0316,0.3986
+Benchmark,Reduced LVEF (<=45%),17.6773,0.3541
+MIMIC-IV,LV wall thickness (>=1.3 cm),22.3593,0.4191
+Benchmark,LV wall thickness (>=1.3 cm),19.4965,0.4014
+MIMIC-IV,Aortic stenosis,5.0656,0.4044
+Benchmark,Aortic stenosis,5.2554,0.3434
+MIMIC-IV,Aortic regurgitation,1.5389,0.3720
+Benchmark,Aortic regurgitation,1.2128,0.3398
+MIMIC-IV,Mitral regurgitation,8.8321,0.3744
+Benchmark,Mitral regurgitation,6.1926,0.3411
+MIMIC-IV,Tricuspid regurgitation,10.3165,0.3789
+Benchmark,Tricuspid regurgitation,6.4866,0.3489
+MIMIC-IV,Pulmonic regurgitation,1.5716,0.2799
+Benchmark,Pulmonic regurgitation,0.3675,0.2581
+MIMIC-IV,RV dysfunction,5.7849,0.3556
+Benchmark,RV dysfunction,7.6994,0.3290
+MIMIC-IV,Pericardial effusion,0.5885,0.3876
+Benchmark,Pericardial effusion,1.2679,0.3998
+MIMIC-IV,Elevated PASP (>=45 mmHg),10.7590,0.4016
+Benchmark,Elevated PASP (>=45 mmHg),12.8445,0.3790
+MIMIC-IV,Elevated TR Vmax (>=3.2 m/s),12.7033,0.3911
+Benchmark,Elevated TR Vmax (>=3.2 m/s),6.8908,0.3634

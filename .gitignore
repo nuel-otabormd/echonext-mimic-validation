@@ -6,7 +6,8 @@
 waveforms/
 predictions/
 !results/tables/*.csv
-!results/figure_data/*.csv   # aggregate curves only, no identifiers
+# aggregate curves only, no identifiers
+!results/figure_data/*.csv
 
 # Python
 __pycache__/
