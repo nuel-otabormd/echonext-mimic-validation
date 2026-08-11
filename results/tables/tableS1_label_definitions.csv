@@ -1,13 +1,13 @@
 #,Condition,EchoNext definition,MIMIC primary definition,Sensitivity analyses,Prevalence % (MIMIC / EchoNext-Mini)³
 1,Reduced LVEF,numeric LVEF ≤45%,best-available quantitative LVEF (biplane to 3D to visual-range midpoint) ≤45%,midpoint-only; lower-bound,16.0% / 18.0%
 2,LV wall thickness,"max(IVS, posterior wall) ≥1.3 cm","max(septal_thickness, inferolateral wall) ≥1.3 cm¹",septal thickness ≥1.5 cm; categorical moderate-or-severe LVH descriptors,22.4% / 18.8%
-3,Aortic stenosis,moderate-or-greater,"aortic_stenosis: moderate, moderate-severe, severe, or very severe",None,4.5% / 5.4%
+3,Aortic stenosis,moderate-or-greater,"Graded severity where populated (11.5% of studies); otherwise peak velocity ≥3.0 m/s, mean gradient ≥20 mmHg, or valve area ≤1.5 cm²",graded severity field only,5.1% / 5.4%
 4,Aortic regurgitation,moderate-or-greater,aortic_regurg ≥ moderate (mild-mod = negative),None,1.5% / 1.2%
 5,Mitral regurgitation,moderate-or-greater,mitral_regurg ≥ moderate (mild-mod = negative),None,8.8% / 6.5%
 6,Tricuspid regurgitation,moderate-or-greater,tricuspid_regurg ≥ moderate (incl. torrential),None,10.3% / 7.0%
 7,Pulmonic regurgitation,moderate-or-greater,"pulm_regurg: moderate-severe, severe, or significant",None,1.6% / 0.4%
 8,RV systolic dysfunction,categorical moderate/severe,"categorical rv_function moderate/severe (incl. ""depressed"")",+ TAPSE <1.7 cm,5.8% / 8.0%
 9,Pericardial effusion,moderate or large,moderate / moderate-large / large (small & below = negative),tamponade descriptors,0.6% / 1.3%
-10,Elevated PASP,numeric PASP ≥45 mmHg,TR gradient + IVC-derived RAP ≥45²,fixed RAP 3/5/10 mmHg,10.7% / 12.9%
+10,Elevated PASP,numeric PASP ≥45 mmHg,TR gradient + IVC-derived RAP ≥45²,fixed RAP 3/5/10 mmHg,10.8% / 12.9%
 11,Elevated TR Vmax,direct TR Vmax ≥3.2 m/s,direct tr_velocity ≥3.2 m/s,derived gradient tr_mmhg≥40.96,12.7% / 6.5%
-12,Any SHD (composite),any of 1–11,GREATEST(1–11); model output index 11,None,47.1% / 43.3%
+12,Any SHD (composite),any of 1–11,GREATEST(1–11); model output index 11,None,47.2% / 43.3%
