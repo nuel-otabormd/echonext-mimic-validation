@@ -12,7 +12,7 @@ Mapping of TRIPOD+AI items to where each is addressed (M = MANUSCRIPT_DRAFT.md; 
 | 6 | Eligibility / inclusion–exclusion | ✅ | M (Methods), D, supplement S1 |
 | 7 | Outcome (label) definition & assessment | ✅ | M (Methods: Labels), D, supplement S1 |
 | 8 | Predictors / model inputs | ✅ | M (Model & preprocessing); 12-lead waveform + 7 tabular |
-| 9 | Missing data handling | ✅ | M/D (missing structured field → negative; atrial rate → 0; imputation sensitivity); **per-label missingness in Supplementary Table S3** |
+| 9 | Missing data handling | ✅ | M/D (missing structured field → negative; atrial rate → 0; imputation sensitivity); **per-label missingness in Supplementary Table S2** |
 | 10 | Model (released EchoNext-Mini); architecture; version | ✅ | M (Model); frozen released weights; equivalence to official module 1.2e-7 |
 | 11 | Model output & post-processing (sigmoid probabilities) | ✅ | M/D |
 | 12 | Analysis: discrimination, calibration, recalibration, utility | ✅ | M (Statistics), R |
@@ -21,9 +21,9 @@ Mapping of TRIPOD+AI items to where each is addressed (M = MANUSCRIPT_DRAFT.md; 
 | 15 | Participants flow (attrition) | ✅ | **Figure 1** (flow diagram) |
 | 16 | Participant characteristics (Table 1) | ✅ | R (Table 1) |
 | 17 | Model performance (discrimination + CIs) | ✅ | R (Table 2: AUROC + 95% CI per label) |
-| 18 | Calibration + recalibration results | ✅ | M (composite recalibration in main text); **Supplementary Table S4** (per-label recalibration); **Figure 2** (calibration before/after) |
-| 19 | Clinical utility | ✅ | Addressed narratively (Discussion): formal net-benefit requires a prospective unselected cohort; decision-curve analysis excluded because this cohort is clinically selected (all already echocardiographed). **Figure 3** = ROC curves. |
-| 20 | Fairness results | ✅ | R (Table 3: subgroup AUROC + 95% CI, sex/age/race) |
+| 18 | Calibration + recalibration results | ✅ | M (composite recalibration in main text); **Supplementary Table S4** (per-label recalibration); **Figure 3** (reliability curves before/after correction); **Supplementary Figure S1** (remaining components) |
+| 19 | Clinical utility | ✅ | R (Prioritization of echocardiography): decision-curve net benefit in **Figure 4A** and capacity-constrained yield in **Supplementary Table S6**. Utility in an unselected population would still require prospective evaluation. |
+| 20 | Fairness results | ✅ | R (Table 5: subgroup AUROC + 95% CI by sex, age, race or ethnicity and care setting; Supplementary Table S5 full) |
 | 21 | Sensitivity analyses | ✅ | M (Results); **Supplementary Table S2** |
 | 22 | Interpretation | ✅ | M (Discussion) |
 | 23 | Limitations | ✅ | M (Discussion: single site, harmonization, no outcomes) |
