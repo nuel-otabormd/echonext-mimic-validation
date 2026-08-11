@@ -47,9 +47,31 @@ unless the PDF itself is opened. Figure 3 was ported for this reason alone: its 
 (<=45%)` panel sat beside the three thresholds in Supplementary Figure S1 and read as a
 typographic error. Its construction is otherwise unchanged.
 
-It also references the base-14 Helvetica rather than embedding a subset. `cairo_pdf` would embed,
-but cairo fails to load on this build for want of X11, and `embedFonts()` shells out to ghostscript,
-which is not installed. The matplotlib figures embed an Arial subset directly.
+It also names the base-14 Helvetica rather than embedding a subset, which journal production systems
+flag. `cairo_pdf` would embed but fails to load on this build for want of X11, so `save_fig()` in
+`theme.R` passes each PDF through `embedFonts()` instead. That needs **ghostscript** on the path
+(`brew install ghostscript`); without it the figure is still written and the script says so rather
+than passing silently. Note that `embedFonts()` does not pass `-dEmbedAllFonts` on its own and
+ghostscript's `pdfwrite` leaves the base-14 fonts as references by default, so `save_fig()` supplies
+that option explicitly. Omitting it produces a call that succeeds, rewrites the file and embeds
+nothing. The matplotlib figures embed an Arial subset directly and need no post-processing.
+
+All eight figures embed their fonts. To check after any change:
+
+```bash
+python - <<'EOF'
+from pypdf import PdfReader; import glob
+for f in sorted(glob.glob('results/figures/*.pdf')):
+    r=PdfReader(f); ok=[]
+    for p in r.pages:
+        for v in (p.get('/Resources',{}).get_object().get('/Font',{}) or {}).values():
+            d=v.get_object(); ds=[d.get('/FontDescriptor')]+[x.get_object().get('/FontDescriptor')
+                                                             for x in (d.get('/DescendantFonts') or [])]
+            ok.append(any(k in y.get_object() for y in ds if y is not None
+                          for k in ('/FontFile','/FontFile2','/FontFile3')))
+    print(f, 'EMBEDDED' if ok and all(ok) else 'NOT EMBEDDED')
+EOF
+```
 
 Arial, not Helvetica: macOS ships Helvetica as a `.ttc` whose bold face matplotlib does not index,
 so a request for bold silently returns the regular face and bold panel titles come out at normal

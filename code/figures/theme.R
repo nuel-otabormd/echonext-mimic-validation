@@ -56,6 +56,43 @@ theme_ehj <- function(base_size = BASE_PT) {
     )
 }
 
+# The base PDF device names the base-14 Helvetica rather than embedding it, and journal production
+# systems flag that. embedFonts() shells out to ghostscript, so the path is resolved once here; if
+# ghostscript is absent the figure is still written and the omission is reported rather than passing
+# silently, because an unembedded font is invisible until a preflight check rejects it.
+GS <- Sys.getenv("R_GSCMD", unset = "")
+if (!nzchar(GS)) {
+  for (cand in c("gs", "/opt/homebrew/bin/gs", "/usr/local/bin/gs")) {
+    found <- suppressWarnings(Sys.which(cand))
+    if (nzchar(found)) { GS <- unname(found); break }
+    if (file.exists(cand)) { GS <- cand; break }
+  }
+}
+
+embed_fonts <- function(pdf_path) {
+  if (!nzchar(GS)) {
+    message("  note: ghostscript not found, fonts left unembedded in ", basename(pdf_path))
+    return(invisible(FALSE))
+  }
+  old <- Sys.getenv("R_GSCMD")
+  Sys.setenv(R_GSCMD = GS)
+  on.exit(Sys.setenv(R_GSCMD = old), add = TRUE)
+  tmp <- paste0(pdf_path, ".embed")
+  # embedFonts() does NOT pass -dEmbedAllFonts, and ghostscript's pdfwrite leaves the base-14 fonts
+  # as references by default. Without these options the call succeeds, rewrites the file and embeds
+  # nothing, which looks like success everywhere except a preflight check.
+  ok <- tryCatch({
+    grDevices::embedFonts(pdf_path, outfile = tmp,
+                          options = "-dEmbedAllFonts=true -dSubsetFonts=true -dPDFSETTINGS=/prepress")
+    TRUE
+  }, error = function(e) { message("  note: embedFonts failed: ", conditionMessage(e)); FALSE })
+  # Only replace the original once the rewritten file exists and is non-empty, so a ghostscript
+  # failure cannot leave a truncated figure behind.
+  if (ok && file.exists(tmp) && file.size(tmp) > 0) file.rename(tmp, pdf_path)
+  else unlink(tmp)
+  invisible(ok)
+}
+
 # width and height in centimetres
 save_fig <- function(plot, name, width, height) {
   pdf_path <- file.path(FIG_DIR, paste0(name, ".pdf"))
@@ -63,6 +100,7 @@ save_fig <- function(plot, name, width, height) {
   # but fails to load, and silently produces no file. Both write true vector output.
   ggsave(pdf_path, plot, width = width, height = height, units = "cm",
          device = grDevices::pdf, useDingbats = FALSE)
+  embed_fonts(pdf_path)
   ggsave(file.path(FIG_DIR, paste0(name, ".png")), plot,
          width = width, height = height, units = "cm", dpi = 600)
   cat(sprintf("  %-28s %.1f x %.1f cm\n", paste0(name, ".pdf"), width, height))
