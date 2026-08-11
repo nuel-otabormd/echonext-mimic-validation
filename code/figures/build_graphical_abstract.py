@@ -7,7 +7,7 @@ from the paper.
 Output: results/figures/graphical_abstract.{png,pdf} at 18.0 x 11.0 cm, 600 dpi, sans serif,
 no text below 8 pt.
 """
-import json, os
+import json, os, sys
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,9 +20,17 @@ DATA = os.path.join(ROOT, "results", "figure_data")
 OUT  = os.path.join(ROOT, "results", "figures")
 os.makedirs(OUT, exist_ok=True)
 
-mpl.rcParams["font.family"] = "sans-serif"
-mpl.rcParams["font.sans-serif"] = ["Helvetica", "Arial", "DejaVu Sans"]
-CM = 1 / 2.54
+sys.path.insert(0, HERE)
+from mpl_house import CM, use_house_style
+
+# Font resolution is shared with the figures rather than set here. This file previously asked for
+# Helvetica first, and macOS ships Helvetica as a .ttc whose bold face matplotlib does not index:
+# every fontweight="bold" below silently returned the regular face, so the title, the three pill
+# labels, the medallion numerals, the headline percentages and the footer all rendered at normal
+# weight and the abstract had no typographic hierarchy at all. use_house_style() resolves a family
+# with a true bold and raises if that ever stops being true. Colours below are deliberately the
+# abstract's own and are not shared with the figures.
+use_house_style()
 
 NAVY, PURPLE, MAGENTA, CRIM = "#1A3A6B", "#5B2D6E", "#90206A", "#C4275C"
 PINKBG, BLUEBG, INK, GREY, LINE = "#FBEDF2", "#EDF1F8", "#2B2B33", "#6E7480", "#D8DEE7"
