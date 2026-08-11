@@ -9,7 +9,7 @@
 | 5 | Mitral regurgitation | moderate-or-greater | mitral_regurg ≥ moderate (mild-mod = negative) | None | 8.8% / 6.5% |
 | 6 | Tricuspid regurgitation | moderate-or-greater | tricuspid_regurg ≥ moderate (incl. torrential) | None | 10.3% / 7.0% |
 | 7 | Pulmonic regurgitation | moderate-or-greater | pulm_regurg: moderate-severe, severe, or significant | None | 1.6% / 0.4% |
-| 8 | RV systolic dysfunction | categorical moderate/severe | categorical rv_function moderate/severe (incl. "depressed") | + TAPSE <1.7 cm | 5.8% / 8.0% |
+| 8 | RV systolic dysfunction | categorical moderate/severe | categorical rv_function moderate/severe (incl. "depressed") | categorical descriptors plus TAPSE <1.7 cm (sensitivity analysis) | 5.8% / 8.0% |
 | 9 | Pericardial effusion | moderate or large | moderate / moderate-large / large (small & below = negative) | tamponade descriptors | 0.6% / 1.3% |
 | 10 | Elevated PASP | numeric PASP ≥45 mmHg | TR gradient + IVC-derived RAP ≥45² | fixed RAP 3/5/10 mmHg | 10.8% / 12.9% |
 | 11 | Elevated TR Vmax | direct TR Vmax ≥3.2 m/s | direct tr_velocity ≥3.2 m/s | derived gradient tr_mmhg≥40.96 | 12.7% / 6.5% |
