@@ -1,12 +1,16 @@
-cff-version: 2.0.1
+cff-version: 1.2.0
 title: "External Validation of EchoNext-Mini in MIMIC-IV"
 message: "If you use this software or its results, please cite it."
 type: software
 authors:
   - family-names: Otabor
     given-names: Emmanuel
-version: 2.0.0
+version: 2.0.1
 license: MIT
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20962994
+    description: Concept DOI, always resolves to the latest version
 abstract: >-
   Independent external validation, recalibration and prioritisation analysis of the publicly
   released EchoNext-Mini electrocardiographic model for structural heart disease, applied frozen to
