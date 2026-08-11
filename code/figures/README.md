@@ -19,7 +19,7 @@ and `pandas`.
 | Script | Output | Size |
 |---|---|---|
 | `fig2_roc.R` | Figure 2, receiver operating characteristic curves | 9.0 x 9.6 cm |
-| `fig3_reliability.R` | Figure 3, reliability curves, four labels, before and after correction | 17.0 x 13.0 cm |
+| `fig3_reliability.py` | Figure 3, reliability curves, four labels, before and after correction | 17.0 x 13.0 cm |
 | `fig4_utility.R` | Figure 4, decision curve and cumulative diagnostic yield | 12.0 x 17.0 cm |
 | `figS1_reliability_all.py` | Supplementary Figure S1, remaining component labels | 18.0 x 11.2 cm |
 | `figS2_acquisition.R` | Supplementary Figure S2, performance by acquisition setting | 16.0 x 10.0 cm |
@@ -36,14 +36,16 @@ for embedding in the manuscript and supplement.
 ## Why two drawing engines
 
 `theme.R` holds the style for the R figures and `mpl_house.py` mirrors it for the Python ones, so
-the two agree on every colour, type size and line weight. Three supplementary outputs are drawn in
-matplotlib because of two limitations of R's base PDF device, both of which fail silently.
+the two agree on every colour, type size and line weight. Figure 3, two supplementary figures and
+the graphical abstract are drawn in matplotlib because of two limitations of R's base PDF device,
+both of which fail silently.
 
 It cannot represent the `>=` and `<=` glyphs. It substitutes three ASCII periods without warning, so
 a panel titled `Elevated PASP >=45 mmHg` is written into the vector file as `Elevated PASP ...45
 mmHg`. The PNG is drawn by a different device and looks correct, so the corruption is invisible
-unless the PDF itself is opened. Figure 3 avoids the problem only because it spells its one
-threshold in ASCII.
+unless the PDF itself is opened. Figure 3 was ported for this reason alone: its `Reduced LVEF
+(<=45%)` panel sat beside the three thresholds in Supplementary Figure S1 and read as a
+typographic error. Its construction is otherwise unchanged.
 
 It also references the base-14 Helvetica rather than embedding a subset. `cairo_pdf` would embed,
 but cairo fails to load on this build for want of X11, and `embedFonts()` shells out to ghostscript,
