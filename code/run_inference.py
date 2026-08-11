@@ -177,10 +177,10 @@ def main():
       print(f"  {done:,}/{len(rows):,}  {el/60:.1f} min elapsed, "
             f"~{el/done*(len(rows)-done)/60:.1f} min left", flush=True)
 
-  probs = np.concatenate(P_fix); probs_v1 = np.concatenate(P_v1)
+  probs = np.concatenate(P_fix); probs_pr_imputed = np.concatenate(P_v1)
   probs_atr = np.concatenate(P_atr)
   np.save(os.path.join(args.out_dir, "probs.npy"), probs)
-  np.save(os.path.join(args.out_dir, "probs_v1.npy"), probs_v1)
+  np.save(os.path.join(args.out_dir, "probs_pr_imputed.npy"), probs_pr_imputed)
   np.save(os.path.join(args.out_dir, "probs_atrial_median.npy"), probs_atr)
   open(os.path.join(args.out_dir, "kept_paths.txt"), "w").write("\n".join(kept))
   if failed:
@@ -189,7 +189,7 @@ def main():
   # ------------------------------------------------------------------ what the PR defect cost
   prmiss = np.array([r['pr_missing'].lower() == 'true'
                      for r in rows if r['ecg_path'] in set(kept)])
-  d = np.abs(probs - probs_v1)
+  d = np.abs(probs - probs_pr_imputed)
   print(f"\ndone in {(time.time()-t0)/60:.1f} min | kept {len(kept):,} | failed {len(failed)}")
   print(f"\nPR-interval defect, effect on predicted probability (n affected = {int(prmiss.sum()):,})")
   print(f"  {'label':18s}{'mean|delta| affected':>22}{'max|delta|':>12}{'mean prob (fixed)':>19}")

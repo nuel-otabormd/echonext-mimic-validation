@@ -32,7 +32,7 @@ SELECT c.subject_id, c.ecg_time,
        WHEN adm.subject_id       IS NOT NULL THEN 'Inpatient ward'
        WHEN acute_pre.subject_id IS NOT NULL THEN 'Emergency / acute'
        ELSE 'Outpatient/ambulatory' END AS setting,
-  -- three-level contrast requested by.
+  -- three-level contrast: emergency or acute, inpatient or intensive care, and outpatient.
   -- MUST be derived from the same precedence as `setting` above. An earlier version re-derived it
   -- independently with admission checked BEFORE ED, which put 888 ECGs taken in the ED (of patients
   -- who were also admitted) into 'Inpatient/ICU', contradicting their own setting_detail.

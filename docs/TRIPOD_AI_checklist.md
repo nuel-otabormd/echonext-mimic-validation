@@ -24,7 +24,7 @@ Mapping of TRIPOD+AI items to where each is addressed (M = MANUSCRIPT_DRAFT.md; 
 | 18 | Calibration + recalibration results | ✅ | M (composite recalibration in main text); **Supplementary Table S4** (per-label recalibration); **Figure 3** (reliability curves before/after correction); **Supplementary Figure S1** (remaining components) |
 | 19 | Clinical utility | ✅ | R (Prioritization of echocardiography): decision-curve net benefit in **Figure 4A** and capacity-constrained yield in **Supplementary Table S6**. Utility in an unselected population would still require prospective evaluation. |
 | 20 | Fairness results | ✅ | R (Table 5: subgroup AUROC + 95% CI by sex, age, race or ethnicity and care setting; Supplementary Table S5 full) |
-| 21 | Sensitivity analyses | ✅ | M (Results); **Supplementary Table S2** |
+| 21 | Sensitivity analyses | ✅ | R (Sensitivity analyses); **Supplementary Table S8** |
 | 22 | Interpretation | ✅ | M (Discussion) |
 | 23 | Limitations | ✅ | M (Discussion: single site, harmonization, no outcomes) |
 | 24 | Fairness/equity implications | ✅ | M (Discussion) |

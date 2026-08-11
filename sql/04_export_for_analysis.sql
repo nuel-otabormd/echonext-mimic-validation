@@ -47,7 +47,7 @@ WHERE c.most_recent_per_patient;
 -- (5) BOTH race sources are used. MIMIC-IV records race in
 --     mimiciv_ed.edstays, and 1,424 cohort patients (34% of the published 4,166 'Unknown' group)
 --     have an informative race there. Using both sources reduces Unknown from 4,166 to 2,742 and
---     de-contaminates the group whose performance asks about.
+--     de-contaminates the Unknown group.
 WITH coh AS (SELECT DISTINCT subject_id FROM `your-gcp-project.echonext.analytic_cohort` WHERE most_recent_per_patient),
 src AS (
   SELECT a.subject_id, a.admittime AS t, a.race FROM `physionet-data.mimiciv_3_1_hosp.admissions` a JOIN coh USING(subject_id)
