@@ -1,0 +1,13 @@
+{
+ "n": 45878,
+ "prev_pct": 47.2,
+ "auroc_mimic": 0.79,
+ "auroc_bench": 0.82,
+ "gap": 0.029,
+ "comp_auroc_lo": 0.679,
+ "comp_auroc_hi": 0.837,
+ "n_overpredict_mimic": 11,
+ "n_overpredict_bench": 11,
+ "n_corrected": 10,
+ "n_components": 11
+}
